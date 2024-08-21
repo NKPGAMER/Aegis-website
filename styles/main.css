@@ -6,7 +6,7 @@ body {
   padding: 0;
   height: 2000px;
   background-color: #090909;
-  color: #C6C6C6;
+  color: #FFCC00; /* Màu gold hơi cam mộ tí */
   position: relative;
   overflow-x: hidden;
 }
@@ -35,7 +35,7 @@ body {
 
 .character {
   position: absolute;
-  color: rgba(255, 255, 0, 0.792);
+  color: #FFCC00; /* Màu gold hơi cam mộ tí */
   font-family: monospace;
   font-size: 20px;
 }
@@ -60,7 +60,7 @@ body {
 }
 
 .header .info {
-  color: #ffffff;
+  color: #FFCC00; /* Màu gold hơi cam mộ tí */
   padding: 30px;
   background-color: rgba(23, 23, 23, 0);
   backdrop-filter: blur(2px);
@@ -72,9 +72,9 @@ body {
 
 .header .button {
   padding: 20px 50px;
-  background-color: orange;
+  background-color: #FFCC00; /* Màu gold hơi cam mộ tí */
   border-radius: 20px;
-  color: white;
+  color: #000000; /* Màu đen */
   font-size: 16px;
   font-weight: 600;
   font-family: 'Platypi' sans-serif;
@@ -91,8 +91,8 @@ body {
   bottom: 6px;
   right: 4px;
   border-radius: 10px;
-  background-color: #EB9400;
-  color: #e3e3e3;
+  background-color: #FFCC00; /* Màu gold hơi cam mộ tí */
+  color: #000000; /* Màu đen */
   padding: 10px;
   z-index: 1000;
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -114,7 +114,7 @@ body {
   left: 0;
   right: 0;
   background-color: #2E2E2E;
-  color: white;
+  color: #FFCC00; /* Màu gold hơi cam mộ tí */
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -138,8 +138,8 @@ body {
 
 .taskbar .button {
   padding: 10px 20px;
-  background-color: #ffb701;
-  color: white;
+  background-color: #FFCC00; /* Màu gold hơi cam mộ tí */
+  color: #000000; /* Màu đen */
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -150,7 +150,7 @@ body {
   flex-direction: column;
   width: 350px;
   height: 400px;
-  color: #ffffff;
+  color: #FFCC00; /* Màu gold hơi cam mộ tí */
   background-color: rgba(23, 23, 23, 0);
   backdrop-filter: blur(3px);
   border-radius: 20px;
@@ -175,12 +175,12 @@ body {
 }
 
 .group label {
-  background-color: #EB9400;
+  background-color: #FFCC00; /* Màu gold hơi cam mộ tí */
   max-width: 300px;
   width: fit-content;
   padding: 10px 30px 4px 20px;
   height: 32px;
-  color: #e3e3e3;
+  color: #000000; /* Màu đen */
   font-size: 22px;
   font-weight: 500;
   border-radius: 0 0 40px 0;
