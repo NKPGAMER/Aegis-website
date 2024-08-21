@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: black;
+  color: white;
+}
+
+.container {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #D4AF37;
+  border: 1px solid gold;
+}
+
+.blur-overlay {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(100, 100, 100, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.dialog {
+  border: 1px solid gold;
+  width: 100%;
+  height: 100%;
+  max-width: 350px;
+  max-height: 130px;
+  border-radius: 13px;
+}
+
+.dialog select {
+  width: 100%;
+  height: 40px;
+  border: 1px solid gold;
+  background-color: #3a3a3a;
+  color: rgb(200, 200, 200);
+  border-radius: 8px;
+}
+
+.dialog input {
+  border: 1px solid gold;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.dialog .ADD {
+  position: fixed;
+  bottom: 6px;
+  right: 4px;
+  border-radius: 10px;
+  background-color: rgb(61, 255, 35);
+  width: 80px;
+  height: 40px;
+  margin: 2px;
+}
+
+.dialog .CANCEL {
+  position: fixed;
+  bottom: 6px;
+  right: 85px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgb(255, 61, 35);
+  width: 80px;
+  height: 40px;
+  margin: 2px;
+}
+
+.group {
+  border: 1px solid #D4AF37;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.add-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.input-container {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid gold;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #2a2a2a;
+  color: white;
+}
+
+#submit-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+  display: block;
+  margin: 20px auto;
+}
+
+#progress-bar {
+  width: 100%;
+  background-color: #2a2a2a;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+#progress {
+  width: 0%;
+  height: 20px;
+  background-color: #4CAF50;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+#status {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  font-family: 'Roboto Mono';
+  width: 100%;
+  height: 50px;
+  border: 1px solid gold;
+  border-radius: 6px;
+  box-shadow: 0 0 10px gold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-left: 10px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked+.slider {
+  background-color: #2196F3;
+}
+
+input:checked+.slider:before {
+  transform: translateX(26px);
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.menu-button svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+.menu {
+  position: absolute;
+  background-color: #2a2a2a;
+  border: 1px solid gold;
+  border-radius: 4px;
+  padding: 5px;
+  z-index: 1000;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 5px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background-color: #3a3a3a;
+}
+
+.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}

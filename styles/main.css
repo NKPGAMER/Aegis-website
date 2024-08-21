@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Platypi:ital,wght@0,300..800;1,300..800&display=swap');
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 2000px;
+  background-color: #090909;
+  color: #C6C6C6;
+  position: relative;
+  overflow-x: hidden;
+}
+
+#container {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#character-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.typewriter {
+  overflow: hidden;
+  font-family: "Platypi", serif;
+}
+
+.character {
+  position: absolute;
+  color: rgba(255, 255, 0, 0.792);
+  font-family: monospace;
+  font-size: 20px;
+}
+
+.header {
+  text-align: center;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.header .logo {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.header .title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.header .info {
+  color: #ffffff;
+  padding: 30px;
+  background-color: rgba(23, 23, 23, 0);
+  backdrop-filter: blur(2px);
+  border-radius: 20px;
+  border: 1px solid #8e8e8e;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+}
+
+.header .button {
+  padding: 20px 50px;
+  background-color: orange;
+  border-radius: 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Platypi' sans-serif;
+  border: none;
+  cursor: pointer;
+}
+
+.header.version {
+  font-size: 10px;
+}
+
+.backToHome {
+  position: fixed;
+  bottom: 6px;
+  right: 4px;
+  border-radius: 10px;
+  background-color: #EB9400;
+  color: #e3e3e3;
+  padding: 10px;
+  z-index: 1000;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.backToHome.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.backToHome.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.taskbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #2E2E2E;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+  max-height: 30px;
+  z-index: 1000;
+}
+
+.taskbar .logo {
+  max-width: 60px;
+  max-height: 60px;
+  margin: 0;
+}
+
+.taskbar .title {
+  margin: 0;
+  font-size: 14px;
+}
+
+.taskbar .button {
+  padding: 10px 20px;
+  background-color: #ffb701;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 400px;
+  color: #ffffff;
+  background-color: rgba(23, 23, 23, 0);
+  backdrop-filter: blur(3px);
+  border-radius: 20px;
+  border: 1px solid #8e8e8e;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  margin: 10px
+}
+
+.group.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.group.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.group label {
+  background-color: #EB9400;
+  max-width: 300px;
+  width: fit-content;
+  padding: 10px 30px 4px 20px;
+  height: 32px;
+  color: #e3e3e3;
+  font-size: 22px;
+  font-weight: 500;
+  border-radius: 0 0 40px 0;
+}
+
+.group .content {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.group .content li {
+  margin: 5px;
+  font-size: 20px;
+}
