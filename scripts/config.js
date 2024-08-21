@@ -539,6 +539,4 @@ function updateProgress(percent) {
   document.getElementById('progress').style.width = `${percent}%`;
 }
 
-updateStatus("Bắt đầu");
-
 fetchConfig();

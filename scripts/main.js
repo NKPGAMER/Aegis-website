@@ -2,23 +2,23 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-window.addEventListener('scroll', function() {
-var header = document.querySelector('.header');
-var taskbar = document.querySelector('.taskbar');
-var scrollPosition = window.scrollY;
-var back = document.querySelector('.backToHome')
+window.addEventListener('scroll', function () {
+  var header = document.querySelector('.header');
+  var taskbar = document.querySelector('.taskbar');
+  var scrollPosition = window.scrollY;
+  var back = document.querySelector('.backToHome');
 
-if (scrollPosition > 550) {
+  if (scrollPosition > 550) {
     header.style.opacity = '0';
     taskbar.style.transform = 'translateY(0)';
     back.classList.add('visible');
     back.classList.remove('hidden');
-} else {
+  } else {
     header.style.opacity = '1';
     taskbar.style.transform = 'translateY(-100%)';
-    back.classList.remove('visible')
+    back.classList.remove('visible');
     back.classList.add('hidden');
-}
+  }
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-const characters = "|"
+const characters = "|";
 const container = document.getElementById('character-container');
 
 async function createCharacter() {
@@ -80,24 +80,24 @@ async function createCharacter() {
 setInterval(createCharacter, 250);
 
 function typeWriter(element) {
-const text = element.getAttribute('data-text');
-const speed = parseInt(element.getAttribute('data-speed')) || 20;
-let i = 0;
+  const text = element.getAttribute('data-text');
+  const speed = parseInt(element.getAttribute('data-speed')) || 20;
+  let i = 0;
 
-function type() {
-if (i < text.length) {
-  element.innerHTML += text.charAt(i);
-  i++;
-  setTimeout(type, speed);
-}
-}
+  function type() {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    }
+  }
 
-type();
+  type();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-const elements = document.querySelectorAll('.typewriter');
-elements.forEach(element => {
-typeWriter(element);
-});
+  const elements = document.querySelectorAll('.typewriter');
+  elements.forEach(element => {
+    typeWriter(element);
+  });
 });
