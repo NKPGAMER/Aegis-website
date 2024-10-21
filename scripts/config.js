@@ -1,316 +1,120 @@
+/* Made By NKPGAMER */
 const version = '1.0-alpha';
+const Package = `Aegis_V${version}.mcpack.zip`;
 let configData = {};
 let draggedElement = null;
 let draggedElementInitialY = 0;
 let draggedElementCurrentY = 0;
 
+const api_defaultConfig = 'https://api.github.com/repos/NKPGAMER/Aegis/contents/default.json';
+const api_contents = 'https://api.github.com/repos/NKPGAMER/Aegis/contents/';
+
 async function fetchConfig() {
   try {
-    updateStatus("Đang tải cấu hình mặc định...");
-    const response = await fetch('https://api.github.com/repos/NKPGAMER/Aegis/contents/default.json');
+    updateStatus("Loading configuration...");
+    const response = await fetch(api_defaultConfig);
     const data = await response.json();
     const content = atob(data.content);
     configData = JSON.parse(content);
     renderConfig(configData, document.getElementById('config-container'));
-    updateStatus("Lấy dữ liệu hoàn tất.");
+    updateStatus("Configuration load complete");
   } catch (error) {
-    console.error('Error fetching config:', error);
-    updateStatus("Lỗi khi tải cấu hình. Vui lòng thử lại.");
+    loadConfigFail(error);
   }
+}
+
+function loadConfigFail(error) {
+  console.error(error);
+  updateStatus("Configuration loading failed, please try again in a few seconds or minutes...");
 }
 
 function renderConfig(data, container, path = '') {
   for (const [key, value] of Object.entries(data)) {
     const currentPath = path ? `${path}.${key}` : key;
     if (typeof value === 'boolean') {
-      const inputContainer = document.createElement('div');
-      inputContainer.className = 'input-container';
-      const label = document.createElement('label');
-      label.textContent = `${key}:`;
-      const switchLabel = document.createElement('label');
-      switchLabel.className = 'switch';
-      const input = document.createElement('input');
-      input.type = 'checkbox';
-      input.checked = value;
-      input.dataset.path = currentPath;
-      const slider = document.createElement('span');
-      slider.className = 'slider';
-      switchLabel.appendChild(input);
-      switchLabel.appendChild(slider);
-      inputContainer.appendChild(label);
-      inputContainer.appendChild(switchLabel);
-      container.appendChild(inputContainer);
-    } else if (typeof value === 'string' || typeof value === 'number') {
-      const inputContainer = document.createElement('div');
-      inputContainer.className = 'input-container';
-      const label = document.createElement('label');
-      label.textContent = `${key} (${typeof value}):`;
-      const input = document.createElement('input');
-      input.type = typeof value === 'number' ? 'number' : 'text';
-      input.value = value;
-      input.dataset.path = currentPath;
-      inputContainer.appendChild(label);
-      inputContainer.appendChild(input);
-      container.appendChild(inputContainer);
-    } else if (Array.isArray(value)) {
-      const group = document.createElement('div');
-      group.className = 'group';
-      const groupHeader = document.createElement('div');
-      groupHeader.className = 'group-header';
-      const groupTitle = document.createElement('h3');
-      groupTitle.textContent = key;
-      const addButton = document.createElement('button');
-      addButton.textContent = 'Thêm';
-      addButton.className = 'add-button';
-      addButton.onclick = () => showAddItemDialog(group, currentPath);
-      groupHeader.appendChild(groupTitle);
-      groupHeader.appendChild(addButton);
-      group.appendChild(groupHeader);
-      container.appendChild(group);
-      value.forEach((item, index) => {
-        const itemContainer = document.createElement('div');
-        itemContainer.className = 'input-container';
-        itemContainer.draggable = true;
-        itemContainer.addEventListener('dragstart', dragStart);
-        itemContainer.addEventListener('dragover', dragOver);
-        itemContainer.addEventListener('dragend', dragEnd);
-        itemContainer.addEventListener('drop', drop);
-        const menuButton = createMenuButton(itemContainer, group, currentPath, index);
-        itemContainer.appendChild(menuButton);
-        renderConfig({ [`${key}[${index}]`]: item }, itemContainer, currentPath);
-        group.appendChild(itemContainer);
-      });
+      renderButton(container, key, value, currentPath);
+    } else if (typeof value === 'string') {
+      renderString(container, key, value, currentPath);
+    } else if (typeof value === 'number') {
+      renderNumber(container, key, value, currentPath);
     } else if (typeof value === 'object') {
-      const group = document.createElement('div');
-      group.className = 'group';
-      const groupTitle = document.createElement('h3');
-      groupTitle.textContent = key;
-      group.appendChild(groupTitle);
-      container.appendChild(group);
-      renderConfig(value, group, currentPath);
+      if (Array.isArray(value)) {
+        //renderArray(container, key, value, currentPath);
+      } else {
+        renderObject(container, key, value, currentPath);
+      }
     }
   }
 }
+function renderString(container, key, value, currentPath) {
+  const inputContainer = document.createElement('div');
+  inputContainer.className = 'input-container';
 
-function createMenuButton(itemContainer, group, path, index) {
-  const menuButton = document.createElement('button');
-  menuButton.className = 'menu-button';
-  menuButton.style = 'color: rgb(220, 220, 20);';
-  menuButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>`;
+  const label = document.createElement('label');
+  label.textContent = `${key}:`;
 
-  let menu = null;
-  let longPressTimer = null;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.value = value;
+  input.dataset.path = currentPath;
 
-  menuButton.addEventListener('mousedown', (e) => {
-    longPressTimer = setTimeout(() => {
-      itemContainer.draggable = true;
-    }, 500);
-  });
-
-  menuButton.addEventListener('mouseup', () => {
-    clearTimeout(longPressTimer);
-    itemContainer.draggable = false;
-  });
-
-  menuButton.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (menu) {
-      menu.remove();
-      menu = null;
-    } else {
-      menu = document.createElement('div');
-      menu.className = 'menu';
-      const editButton = document.createElement('button');
-      editButton.textContent = 'Chỉnh sửa';
-      editButton.onclick = () => showEditItemDialog(itemContainer, group, path, index);
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Xóa';
-      deleteButton.onclick = () => {
-        group.removeChild(itemContainer);
-        updateArrayIndices(group, path);
-      };
-      menu.appendChild(editButton);
-      menu.appendChild(deleteButton);
-      menuButton.appendChild(menu);
-    }
-  });
-
-  return menuButton;
+  inputContainer.appendChild(label);
+  inputContainer.appendChild(input);
+  container.appendChild(inputContainer);
 }
 
-function showAddItemDialog(container, path) {
-  const dialog = document.createElement('div');
-  dialog.className = 'dialog';
-  dialog.style.position = 'fixed';
-  dialog.style.top = '50%';
-  dialog.style.left = '50%';
-  dialog.style.transform = 'translate(-50%, -50%)';
-  dialog.style.zIndex = '1000';
-  dialog.style.padding = '20px';
-  dialog.style.backgroundColor = '#2a2a2a';
+function renderNumber(container, key, value, currentPath) {
+  const inputContainer = document.createElement('div');
+  inputContainer.className = 'input-container';
 
-  let Type = '';
-  const typeSelect = document.createElement('select');
-  ['string', 'number', 'boolean', 'array', 'object'].forEach(type => {
-    const option = document.createElement('option');
-    option.style.margin = '10px';
-    option.value = type;
-    option.textContent = type;
-    typeSelect.appendChild(option);
-  });
+  const label = document.createElement('label');
+  label.textContent = `${key}:`;
 
-  const keyInput = document.createElement('input');
-  keyInput.placeholder = 'Key';
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.value = value;
+  input.dataset.path = currentPath;
 
-  const valueInput = document.createElement('input');
-  valueInput.placeholder = 'Value';
-
-  const addButton = document.createElement('button');
-  addButton.textContent = 'Thêm';
-  addButton.className = 'ADD';
-
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = 'Huỷ';
-  closeBtn.className = 'CANCEL';
-
-  const overlay = document.createElement('div');
-  overlay.className = 'blur-overlay';
-
-  typeSelect.addEventListener("change", () => {
-    // Xóa các phần tử cũ trước khi thêm cái mới
-    dialog.innerHTML = '';
-    dialog.appendChild(typeSelect);
-
-    if (typeSelect.value === 'string' || typeSelect.value === 'number' || typeSelect.value === 'boolean') {
-      dialog.appendChild(valueInput);
-    } else if (typeSelect.value === 'object') {
-      dialog.appendChild(keyInput);
-      dialog.appendChild(valueInput);
-    }
-
-    dialog.appendChild(addButton);
-    dialog.appendChild(closeBtn);
-  });
-
-  addButton.onclick = () => {
-    const type = typeSelect.value;
-    let value = valueInput.value;
-
-    if (type === 'number') {
-      value = Number(value);
-    } else if (type === 'boolean') {
-      value = value.toLowerCase() === 'true';
-    } else if (type === 'array') {
-      value = [];
-    } else if (type === 'object') {
-      const key = keyInput.value;
-      if (!key) {
-        alert('Key không được để trống!');
-        return;
-      }
-      value = { [key]: null };
-    }
-
-    const newPath = `${path}[${container.children.length - 1}]`;
-    const itemContainer = document.createElement('div');
-    itemContainer.className = 'input-container';
-    const menuButton = createMenuButton(itemContainer, container, path, container.children.length - 1);
-    itemContainer.appendChild(menuButton);
-    renderConfig({ ["new"]: value }, itemContainer, newPath);
-    container.appendChild(itemContainer);
-
-    document.body.removeChild(overlay);
-    document.body.removeChild(dialog);
-
-    if (type === 'object') {
-      const objectContainer = container.lastChild;
-      showAddItemDialog(objectContainer, `${newPath}[${keyInput.value}]`);
-    }
-  };
-
-  closeBtn.onclick = () => {
-    document.body.removeChild(dialog);
-    document.body.removeChild(overlay);
-  };
-
-  dialog.appendChild(typeSelect);
-  dialog.appendChild(valueInput);
-  dialog.appendChild(addButton);
-  dialog.appendChild(closeBtn);
-
-  document.body.appendChild(overlay);
-  document.body.appendChild(dialog);
+  inputContainer.appendChild(label);
+  inputContainer.appendChild(input);
+  container.appendChild(inputContainer);
 }
 
+function renderButton(container, key, value, currentPath) {
+  const inputContainer = document.createElement('div');
+  inputContainer.className = 'input-container';
 
-function showEditItemDialog(itemContainer, group, path, index) {
-  const dialog = document.createElement('div');
-  dialog.className = 'group';
-  dialog.style.position = 'fixed';
-  dialog.style.top = '50%';
-  dialog.style.left = '50%';
-  dialog.style.transform = 'translate(-50%, -50%)';
-  dialog.style.zIndex = '1000';
-  dialog.style.padding = '20px';
-  dialog.style.backgroundColor = '#2a2a2a';
+  const label = document.createElement('label');
+  label.textContent = `${key}:`;
 
-  const currentValue = getValueFromPath(configData, `${path}[${index}]`);
-  const currentKey = Object.keys(currentValue)[0];
-  const currentValueType = typeof currentValue[currentKey];
+  const switchLabel = document.createElement('label');
+  switchLabel.className = 'switch';
 
-  const typeSelect = document.createElement('select');
-  ['string', 'number', 'boolean', 'array', 'object'].forEach(type => {
-    const option = document.createElement('option');
-    option.value = type;
-    option.textContent = type;
-    if (type === currentValueType || (Array.isArray(currentValue[currentKey]) && type === 'array')) {
-      option.selected = true;
-    }
-    typeSelect.appendChild(option);
-  });
+  const input = document.createElement('input');
+  input.type = 'checkbox';
+  input.checked = value;
+  input.dataset.path = currentPath;
 
-  const keyInput = document.createElement('input');
-  keyInput.value = currentKey;
-  keyInput.placeholder = 'Tên key';
+  const slider = document.createElement('span');
+  slider.className = 'slider';
 
-  const valueInput = document.createElement('input');
-  valueInput.value = JSON.stringify(currentValue[currentKey]);
-  valueInput.placeholder = 'Giá trị';
+  switchLabel.appendChild(input);
+  switchLabel.appendChild(slider);
+  inputContainer.appendChild(label);
+  inputContainer.appendChild(switchLabel);
+  container.appendChild(inputContainer);
+}
 
-  const saveButton = document.createElement('button');
-  saveButton.textContent = 'Lưu';
-  saveButton.onclick = () => {
-    const type = typeSelect.value;
-    const key = keyInput.value;
-    let value = valueInput.value;
-
-    if (type === 'number') {
-      value = Number(value);
-    } else if (type === 'boolean') {
-      value = value.toLowerCase() === 'true';
-    } else if (type === 'array') {
-      value = JSON.parse(value);
-    } else if (type === 'object') {
-      value = JSON.parse(value);
-    }
-
-    const newPath = `${path}[${index}]`;
-    updateConfigValue(newPath, { [key]: value });
-
-    itemContainer.innerHTML = '';
-    const menuButton = createMenuButton(itemContainer, group, path, index);
-    itemContainer.appendChild(menuButton);
-    renderConfig({ [key]: value }, itemContainer, newPath);
-
-    document.body.removeChild(dialog);
-  };
-
-  dialog.appendChild(typeSelect);
-  dialog.appendChild(keyInput);
-  dialog.appendChild(valueInput);
-  dialog.appendChild(saveButton);
-
-  document.body.appendChild(dialog);
+function renderObject(container, key, value, currentPath) {
+  const group = document.createElement('div');
+  group.className = 'group';
+  
+  const groupTitle = document.createElement('h3');
+  groupTitle.textContent = key;
+  group.appendChild(groupTitle);
+  
+  container.appendChild(group);
+  renderConfig(value, group, currentPath);
 }
 
 function updateConfigData() {
@@ -436,31 +240,30 @@ function drop(e) {
 }
 
 async function saveConfig() {
-  updateStatus("Xử lý cấu hinh");
+  updateStatus("Processing configuration...");
   updateConfigData();
   const configContent = `export default ${JSON.stringify(configData, null, 2)};`;
 
   try {
-    updateStatus("Tạo tệp nén...");
     const zip = new JSZip();
-
-    updateStatus("Lấy dữ liệu");
     const repoContent = await fetchRepoContent('');
     await addFilesToZip(zip, repoContent);
-
-    updateStatus("Tạo tệp config");
+    
     zip.file('scripts/Data/config.js', configContent);
 
-    updateStatus("Đang nén...");
-    const content = await zip.generateAsync({ type: "blob" });
-    const zipBlob = new Blob([content], { type: 'application/zip' });
+    updateStatus("Compressing...");
+    const content = await zip.generateAsync({
+      type: "blob"
+    });
+    const zipBlob = new Blob([content], {
+      type: 'application/zip'
+    });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(zipBlob);
-    downloadLink.download = `Aegis_${version}.mcpack.zip`;
+    downloadLink.download = Package;
 
     downloadLink.click();
-
-    updateStatus("Xong! Bắt đầu tải...");
+    updateStatus("Done. Start downloading");
   } catch (error) {
     console.error('Error saving config:', error);
     updateStatus("Lỗi khi lưu cấu hình. Vui lòng thử lại.");
@@ -468,7 +271,7 @@ async function saveConfig() {
 }
 
 async function fetchRepoContent(path) {
-  const response = await fetch(`https://api.github.com/repos/NKPGAMER/Aegis/contents/${path}`);
+  const response = await fetch(`${api_contents}${path}`);
   return await response.json();
 }
 
@@ -488,7 +291,7 @@ async function addFilesToZip(zip, items) {
       const subItems = await fetchRepoContent(item.path);
       await addFilesToZip(zip, subItems);
     }
-    updateStatus(`Đang xử lý\n${item.path}`);
+    updateStatus(`Processing\n${item.path}`);
   }
 }
 
@@ -507,7 +310,10 @@ async function fetchFileContent(url) {
   const totalLength = parseInt(contentLength, 10);
 
   while (true) {
-    const { done, value } = await reader.read();
+    const {
+      done,
+      value
+    } = await reader.read();
 
     if (done) {
       break;
