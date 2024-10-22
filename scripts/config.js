@@ -1,120 +1,95 @@
-/* Made By NKPGAMER */
 const version = '1.0-alpha';
-const Package = `Aegis_V${version}.mcpack.zip`;
 let configData = {};
 let draggedElement = null;
 let draggedElementInitialY = 0;
 let draggedElementCurrentY = 0;
 
-const api_defaultConfig = 'https://api.github.com/repos/NKPGAMER/Aegis/contents/default.json';
-const api_contents = 'https://api.github.com/repos/NKPGAMER/Aegis/contents/';
-
 async function fetchConfig() {
   try {
-    updateStatus("Loading configuration...");
-    const response = await fetch(api_defaultConfig);
+    updateStatus("Đang tải cấu hình mặc định...");
+    const response = await fetch('https://api.github.com/repos/NKPGAMER/Aegis/contents/default.json');
     const data = await response.json();
     const content = atob(data.content);
     configData = JSON.parse(content);
     renderConfig(configData, document.getElementById('config-container'));
-    updateStatus("Configuration load complete");
+    updateStatus("Lấy dữ liệu hoàn tất.");
   } catch (error) {
-    loadConfigFail(error);
+    console.error('Error fetching config:', error);
+    updateStatus("Lỗi khi tải cấu hình. Vui lòng thử lại.");
   }
-}
-
-function loadConfigFail(error) {
-  console.error(error);
-  updateStatus("Configuration loading failed, please try again in a few seconds or minutes...");
 }
 
 function renderConfig(data, container, path = '') {
   for (const [key, value] of Object.entries(data)) {
     const currentPath = path ? `${path}.${key}` : key;
     if (typeof value === 'boolean') {
-      renderButton(container, key, value, currentPath);
-    } else if (typeof value === 'string') {
-      renderString(container, key, value, currentPath);
-    } else if (typeof value === 'number') {
-      renderNumber(container, key, value, currentPath);
+      const inputContainer = document.createElement('div');
+      inputContainer.className = 'input-container';
+      const label = document.createElement('label');
+      label.textContent = `${key}:`;
+      const switchLabel = document.createElement('label');
+      switchLabel.className = 'switch';
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.checked = value;
+      input.dataset.path = currentPath;
+      const slider = document.createElement('span');
+      slider.className = 'slider';
+      switchLabel.appendChild(input);
+      switchLabel.appendChild(slider);
+      inputContainer.appendChild(label);
+      inputContainer.appendChild(switchLabel);
+      container.appendChild(inputContainer);
+    } else if (typeof value === 'string' || typeof value === 'number') {
+      const inputContainer = document.createElement('div');
+      inputContainer.className = 'input-container';
+      const label = document.createElement('label');
+      label.textContent = `${key} (${typeof value}):`;
+      const input = document.createElement('input');
+      input.type = typeof value === 'number' ? 'number' : 'text';
+      input.value = value;
+      input.dataset.path = currentPath;
+      inputContainer.appendChild(label);
+      inputContainer.appendChild(input);
+      container.appendChild(inputContainer);
+    } else if (Array.isArray(value)) {
+      const group = document.createElement('div');
+      group.className = 'group';
+      const groupHeader = document.createElement('div');
+      groupHeader.className = 'group-header';
+      const groupTitle = document.createElement('h3');
+      groupTitle.textContent = key;
+      const addButton = document.createElement('button');
+      addButton.textContent = 'Thêm';
+      addButton.className = 'add-button';
+      addButton.onclick = () => showAddItemDialog(group, currentPath);
+      groupHeader.appendChild(groupTitle);
+      groupHeader.appendChild(addButton);
+      group.appendChild(groupHeader);
+      container.appendChild(group);
+      value.forEach((item, index) => {
+        const itemContainer = document.createElement('div');
+        itemContainer.className = 'input-container';
+        itemContainer.draggable = true;
+        itemContainer.addEventListener('dragstart', dragStart);
+        itemContainer.addEventListener('dragover', dragOver);
+        itemContainer.addEventListener('dragend', dragEnd);
+        itemContainer.addEventListener('drop', drop);
+        const menuButton = createMenuButton(itemContainer, group, currentPath, index);
+        itemContainer.appendChild(menuButton);
+        renderConfig({ [`${key}[${index}]`]: item }, itemContainer, currentPath);
+        group.appendChild(itemContainer);
+      });
     } else if (typeof value === 'object') {
-      if (Array.isArray(value)) {
-        //renderArray(container, key, value, currentPath);
-      } else {
-        renderObject(container, key, value, currentPath);
-      }
+      const group = document.createElement('div');
+      group.className = 'group';
+      const groupTitle = document.createElement('h3');
+      groupTitle.textContent = key;
+      group.appendChild(groupTitle);
+      container.appendChild(group);
+      renderConfig(value, group, currentPath);
     }
   }
-}
-function renderString(container, key, value, currentPath) {
-  const inputContainer = document.createElement('div');
-  inputContainer.className = 'input-container';
-
-  const label = document.createElement('label');
-  label.textContent = `${key}:`;
-
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.value = value;
-  input.dataset.path = currentPath;
-
-  inputContainer.appendChild(label);
-  inputContainer.appendChild(input);
-  container.appendChild(inputContainer);
-}
-
-function renderNumber(container, key, value, currentPath) {
-  const inputContainer = document.createElement('div');
-  inputContainer.className = 'input-container';
-
-  const label = document.createElement('label');
-  label.textContent = `${key}:`;
-
-  const input = document.createElement('input');
-  input.type = 'number';
-  input.value = value;
-  input.dataset.path = currentPath;
-
-  inputContainer.appendChild(label);
-  inputContainer.appendChild(input);
-  container.appendChild(inputContainer);
-}
-
-function renderButton(container, key, value, currentPath) {
-  const inputContainer = document.createElement('div');
-  inputContainer.className = 'input-container';
-
-  const label = document.createElement('label');
-  label.textContent = `${key}:`;
-
-  const switchLabel = document.createElement('label');
-  switchLabel.className = 'switch';
-
-  const input = document.createElement('input');
-  input.type = 'checkbox';
-  input.checked = value;
-  input.dataset.path = currentPath;
-
-  const slider = document.createElement('span');
-  slider.className = 'slider';
-
-  switchLabel.appendChild(input);
-  switchLabel.appendChild(slider);
-  inputContainer.appendChild(label);
-  inputContainer.appendChild(switchLabel);
-  container.appendChild(inputContainer);
-}
-
-function renderObject(container, key, value, currentPath) {
-  const group = document.createElement('div');
-  group.className = 'group';
-  
-  const groupTitle = document.createElement('h3');
-  groupTitle.textContent = key;
-  group.appendChild(groupTitle);
-  
-  container.appendChild(group);
-  renderConfig(value, group, currentPath);
 }
 
 function updateConfigData() {
@@ -240,30 +215,31 @@ function drop(e) {
 }
 
 async function saveConfig() {
-  updateStatus("Processing configuration...");
+  updateStatus("Xử lý cấu hinh");
   updateConfigData();
   const configContent = `export default ${JSON.stringify(configData, null, 2)};`;
 
   try {
+    updateStatus("Tạo tệp nén...");
     const zip = new JSZip();
+
+    updateStatus("Lấy dữ liệu");
     const repoContent = await fetchRepoContent('');
     await addFilesToZip(zip, repoContent);
-    
+
+    updateStatus("Tạo tệp config");
     zip.file('scripts/Data/config.js', configContent);
 
-    updateStatus("Compressing...");
-    const content = await zip.generateAsync({
-      type: "blob"
-    });
-    const zipBlob = new Blob([content], {
-      type: 'application/zip'
-    });
+    updateStatus("Đang nén...");
+    const content = await zip.generateAsync({ type: "blob" });
+    const zipBlob = new Blob([content], { type: 'application/zip' });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(zipBlob);
-    downloadLink.download = Package;
+    downloadLink.download = `Aegis_${version}.mcpack.zip`;
 
     downloadLink.click();
-    updateStatus("Done. Start downloading");
+
+    updateStatus("Xong! Bắt đầu tải...");
   } catch (error) {
     console.error('Error saving config:', error);
     updateStatus("Lỗi khi lưu cấu hình. Vui lòng thử lại.");
@@ -271,7 +247,7 @@ async function saveConfig() {
 }
 
 async function fetchRepoContent(path) {
-  const response = await fetch(`${api_contents}${path}`);
+  const response = await fetch(`https://api.github.com/repos/NKPGAMER/Aegis/contents/${path}`);
   return await response.json();
 }
 
@@ -291,7 +267,7 @@ async function addFilesToZip(zip, items) {
       const subItems = await fetchRepoContent(item.path);
       await addFilesToZip(zip, subItems);
     }
-    updateStatus(`Processing\n${item.path}`);
+    updateStatus(`Đang xử lý\n${item.path}`);
   }
 }
 
@@ -310,10 +286,7 @@ async function fetchFileContent(url) {
   const totalLength = parseInt(contentLength, 10);
 
   while (true) {
-    const {
-      done,
-      value
-    } = await reader.read();
+    const { done, value } = await reader.read();
 
     if (done) {
       break;
