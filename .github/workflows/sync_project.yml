@@ -4,11 +4,20 @@ name: Sync Aegis Project with Website
 on:
   push:
     branches: [ main ]
-  # Chạy tự động mỗi 6 tiếng
+
+  # Khi có pull_request
+  pull_request:
+    types: [ opened, reopened, synchronize ]
+
+  # Chạy tự động mỗi 1 phút
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '*/1 * * * *'
   # Cho phép chạy thủ công
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   sync:
