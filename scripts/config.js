@@ -5,23 +5,17 @@ let draggedElement = null;
 let draggedElementInitialY = 0;
 let draggedElementCurrentY = 0;
 
-const API = {
-  defaultConfig: 'https://api.github.com/repos/NKPGAMER/Aegis/contents/default.json',
-  content: 'https://api.github.com/repos/NKPGAMER/Aegis/contents',
-  download: 'https://github.com/NKPGAMER/Aegis/archive/refs/heads/main.zip'
-}
+// Giả định rằng bạn có tệp Config.js trong cùng thư mục hoặc đường dẫn tương ứng
+import config from '../src/project/aegis/scripts/Data/Config';
 
-async function fetchConfig() {
+async function loadConfig() {
   try {
     updateStatus("Đang tải cấu hình...");
-    const response = await fetch(API.defaultConfig);
-    const data = await response.json();
-    const content = atob(data.content);
-    configData = JSON.parse(content);
+    configData = config; // Gán trực tiếp cấu hình từ tệp Config.js
     renderConfig(configData, document.getElementById('config-container'));
     updateStatus("Lấy dữ liệu hoàn tất.");
   } catch (error) {
-    console.error('Error fetching config:', error);
+    console.error('Error loading config:', error);
     updateStatus("Lỗi khi tải cấu hình. Vui lòng thử lại.");
   }
 }
@@ -149,170 +143,58 @@ function updateConfigData() {
   }
 }
 
-function updateConfigValue(path, value) {
-  const parts = path.split('.');
-  let current = configData;
-  for (let i = 0; i < parts.length - 1; i++) {
-    if (parts[i].includes('[')) {
-      const [arrayName, index] = parts[i].split(/[\[\]]/);
-      current = current[arrayName][parseInt(index)];
-    } else {
-      current = current[parts[i]];
-    }
-  }
-  const lastPart = parts[parts.length - 1];
-  if (lastPart.includes('[')) {
-    const [arrayName, index] = lastPart.split(/[\[\]]/);
-    current[arrayName][parseInt(index)] = value;
-  } else {
-    current[lastPart] = value;
-  }
-}
-
-function getValueFromPath(obj, path) {
-  const parts = path.split('.');
-  let current = obj;
-  for (const part of parts) {
-    if (part.includes('[')) {
-      const [arrayName, index] = part.split(/[\[\]]/);
-      current = current[arrayName][parseInt(index)];
-    } else {
-      current = current[part];
-    }
-  }
-  return current;
-}
-
-function updateArrayIndices(container, path) {
-  const items = container.querySelectorAll('.input-container');
-  items.forEach((item, index) => {
-    const inputs = item.querySelectorAll('input');
-    inputs.forEach(input => {
-      const inputPath = input.dataset.path;
-      const newPath = inputPath.replace(/\[\d+\]/, `[${index}]`);
-      input.dataset.path = newPath;
-    });
-  });
-}
-
-function dragStart(e) {
-  draggedElement = this;
-  draggedElementInitialY = e.clientY;
-  setTimeout(() => this.classList.add('dragging'), 0);
-}
-
-function dragOver(e) {
-  e.preventDefault();
-  draggedElementCurrentY = e.clientY;
-  const items = [...this.parentNode.querySelectorAll('.input-container:not(.dragging)')];
-  const nextSibling = items.find(item => {
-    return draggedElementCurrentY <= item.offsetTop + item.offsetHeight / 2;
-  });
-  this.parentNode.insertBefore(draggedElement, nextSibling);
-}
-
-function dragEnd() {
-  this.classList.remove('dragging');
-  draggedElement = null;
-  updateArrayIndices(this.parentNode, this.parentNode.dataset.path);
-}
-
-function drop(e) {
-  e.preventDefault();
-}
-
 async function saveConfig() {
-  updateStatus("Processing configuration");
+  updateStatus("Đang xử lý cấu hình");
   updateConfigData();
+  
   const configContent = `export default ${JSON.stringify(configData, null, 2)};`;
 
   try {
-    updateStatus("Creating zip file...");
+    updateStatus("Đang ghi vào tệp Config.js...");
+
+    // Ghi đè tệp Config.js
+    await writeFile('./Config.js', configContent); // Hàm này cần được định nghĩa
+
+    updateStatus("Đang nén thư mục aegis...");
     const zip = new JSZip();
+    
+    // Thêm các file từ thư mục src/project/aegis/
+    await addFilesToZip(zip, './src/project/aegis/'); // Cần một hàm đọc thư mục và thêm file vào zip
 
-    updateStatus("Fetching data");
-    const repoContent = await fetchRepoContent('');
-    await addFilesToZip(zip, repoContent);
-
-    updateStatus("Creating config file");
-    zip.file('scripts/Data/config.js', configContent);
-
-    updateStatus("Compressing...");
+    updateStatus("Đang tạo file zip...");
     const content = await zip.generateAsync({ type: "blob" });
     const zipBlob = new Blob([content], { type: 'application/zip' });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(zipBlob);
-    downloadLink.download = `Aegis_${version}.mcpack.zip`;
+    downloadLink.download = `${PackName}`;
 
     downloadLink.click();
-
-    updateStatus("Done! Starting download...");
+    updateStatus("Hoàn thành! Đang bắt đầu tải xuống...");
   } catch (error) {
     console.error('Error saving config:', error);
-    updateStatus("Error saving configuration. Please try again.");
+    updateStatus("Lỗi khi lưu cấu hình. Vui lòng thử lại.");
   }
 }
 
-async function addFilesToZip(zip, items) {
-  const fileItems = items.filter(item => item.type === 'file');
-  const dirItems = items.filter(item => item.type === 'dir');
-
-  const totalFiles = fileItems.length;
+async function addFilesToZip(zip, folderPath) {
+  const items = await getFilesFromFolder(folderPath); // Cần hàm này để lấy danh sách file trong thư mục
+  const totalFiles = items.length;
   let processedFiles = 0;
 
-  // Process all files concurrently
-  await Promise.all(fileItems.map(async (item) => {
-    const fileContent = await fetchFileContent(item.download_url);
-    zip.file(item.path, fileContent);
+  // Xử lý tất cả các file đồng thời
+  await Promise.all(items.map(async (item) => {
+    const fileContent = await fetchFileContent(item); // Cần một hàm để lấy nội dung file
+    zip.file(item.name, fileContent);
 
     processedFiles += 1;
     const percent = (processedFiles / totalFiles) * 100;
     updateProgress(percent);
-    updateStatus(`Processing ${item.path}`);
+    updateStatus(`Đang xử lý ${item.name}`);
   }));
-
-  // Process directories
-  for (const item of dirItems) {
-    const subItems = await fetchRepoContent(item.path);
-    await addFilesToZip(zip, subItems);
-  }
 }
 
-async function fetchFileContent(url) {
-  const response = await fetch(url);
-  const contentLength = response.headers.get('content-length');
-
-  if (!contentLength) {
-    return await response.arrayBuffer();
-  }
-
-  const reader = response.body.getReader();
-  let receivedLength = 0;
-  let chunks = [];
-  const totalLength = parseInt(contentLength, 10);
-
-  while (true) {
-    const { done, value } = await reader.read();
-
-    if (done) {
-      break;
-    }
-
-    chunks.push(value);
-    receivedLength += value.length;
-
-    const percent = (receivedLength / totalLength) * 100;
-    updateProgress(percent);
-  }
-
-  let chunksAll = new Uint8Array(receivedLength);
-  let position = 0;
-  for (let chunk of chunks) {
-    chunksAll.set(chunk, position);
-    position += chunk.length;
-  }
-
-  return chunksAll.buffer;
+async function fetchFileContent(filePath) {
+  // Sử dụng File API hoặc tương tự để đọc nội dung file từ hệ thống
 }
 
 function updateStatus(message) {
@@ -323,13 +205,16 @@ function updateProgress(percent) {
   document.getElementById('progress').style.width = `${percent}%`;
 }
 
-async function fetchRepoContent(path) {
-  const response = await fetch(`${API.content}/${path}`);
-  return await response.json();
+async function writeFile(filePath, content) {
+  // Hàm này cần được định nghĩa để ghi nội dung vào tệp
+}
+
+function getFilesFromFolder(folderPath) {
+  // Hàm này cần được định nghĩa để trả về danh sách file trong thư mục
 }
 
 function OpenConfig() {
-  fetchConfig();
+  loadConfig();
   document.getElementById('container').style.display = 'grid';
   document.getElementById('download-config').style.display = 'none';
 }
