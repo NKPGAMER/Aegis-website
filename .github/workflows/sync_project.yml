@@ -1,41 +1,60 @@
-name: Sync Project to Website
+name: Sync Aegis Project with Website
 
+# Trigger khi có push vào branch main của Aegis
 on:
-  workflow_dispatch: # Kích hoạt thủ công
   push:
-    branches:
-      - main # Nhánh chính của repo dự án (thay thế nếu dùng nhánh khác)
+    branches: [ main ]
+  # Chạy tự động mỗi 6 tiếng
+  schedule:
+    - cron: '0 */6 * * *'
+  # Cho phép chạy thủ công
+  workflow_dispatch:
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout Website Repo
+      - name: Checkout Aegis repository
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: website
-
-      - name: Checkout Project Repo
+          path: aegis-repo
+          
+      - name: Checkout Aegis-website repository
         uses: actions/checkout@v2
         with:
-          repository: NKPGAMER/Aegis # Thay bằng repo dự án của bạn
-          ref: main # Nhánh chính của repo dự án
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: project
-
-      - name: Copy Project to Website
+          repository: NKPGAMER/Aegis-website
+          token: ${{ secrets.PAT_TOKEN }}
+          path: website-repo
+          
+      - name: Sync project files
         run: |
-          cp -R project/* website # Đường dẫn bạn muốn chèn dự án vào website
-
-      - name: Commit and Push changes
+          # Tạo thư mục project trong website nếu chưa tồn tại
+          mkdir -p website-repo/src/project
+          
+          # Sync toàn bộ project, loại trừ các file không cần thiết
+          rsync -av --delete \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude 'node_modules/' \
+            --exclude '.env' \
+            aegis-repo/ website-repo/src/project/aegis/
+          
+      - name: Commit and push changes
         run: |
-          cd website
-          git config user.name "github-actions[bot]"
-          git config user.email "<>"
-          git add .
-          git commit -m "Sync project with website"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          cd website-repo
+          git config user.name "NKPGAMER"
+          git config user.email "NKPGAMER@users.noreply.github.com"
+          
+          if git status --porcelain | grep .; then
+            git add .
+            git commit -m "chore: Sync Aegis project files [skip ci]"
+            git push
+          else
+            echo "No changes to sync"
+          fi
+        
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error::Sync failed - Please check the logs for details"
