@@ -20,14 +20,14 @@ jobs:
       - name: Checkout Project Repo
         uses: actions/checkout@v2
         with:
-          repository: username/repo-project # Thay bằng repo dự án của bạn
+          repository: NKPGAMER/Aegis # Thay bằng repo dự án của bạn
           ref: main # Nhánh chính của repo dự án
           token: ${{ secrets.GITHUB_TOKEN }}
           path: project
 
       - name: Copy Project to Website
         run: |
-          cp -R project/* website/path-to-project-folder # Đường dẫn bạn muốn chèn dự án vào website
+          cp -R project/* website # Đường dẫn bạn muốn chèn dự án vào website
 
       - name: Commit and Push changes
         run: |
