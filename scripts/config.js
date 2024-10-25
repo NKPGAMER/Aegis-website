@@ -1,13 +1,20 @@
 const version = '1.0-alpha';
+const PackName = `Aegis_Anti_Cheat_v${version}.mcpack.zip`;
 let configData = {};
 let draggedElement = null;
 let draggedElementInitialY = 0;
 let draggedElementCurrentY = 0;
 
+const API = {
+  defaultConfig: 'https://api.github.com/repos/NKPGAMER/Aegis/contents/default.json',
+  content: 'https://api.github.com/repos/NKPGAMER/Aegis/contents',
+  download: 'https://github.com/NKPGAMER/Aegis/archive/refs/heads/main.zip'
+}
+
 async function fetchConfig() {
   try {
-    updateStatus("Đang tải cấu hình mặc định...");
-    const response = await fetch('https://api.github.com/repos/NKPGAMER/Aegis/contents/default.json');
+    updateStatus("Đang tải cấu hình...");
+    const response = await fetch(API.defaultConfig);
     const data = await response.json();
     const content = atob(data.content);
     configData = JSON.parse(content);
@@ -215,22 +222,22 @@ function drop(e) {
 }
 
 async function saveConfig() {
-  updateStatus("Xử lý cấu hinh");
+  updateStatus("Processing configuration");
   updateConfigData();
   const configContent = `export default ${JSON.stringify(configData, null, 2)};`;
 
   try {
-    updateStatus("Tạo tệp nén...");
+    updateStatus("Creating zip file...");
     const zip = new JSZip();
 
-    updateStatus("Lấy dữ liệu");
+    updateStatus("Fetching data");
     const repoContent = await fetchRepoContent('');
     await addFilesToZip(zip, repoContent);
 
-    updateStatus("Tạo tệp config");
+    updateStatus("Creating config file");
     zip.file('scripts/Data/config.js', configContent);
 
-    updateStatus("Đang nén...");
+    updateStatus("Compressing...");
     const content = await zip.generateAsync({ type: "blob" });
     const zipBlob = new Blob([content], { type: 'application/zip' });
     const downloadLink = document.createElement('a');
@@ -239,38 +246,37 @@ async function saveConfig() {
 
     downloadLink.click();
 
-    updateStatus("Xong! Bắt đầu tải...");
+    updateStatus("Done! Starting download...");
   } catch (error) {
     console.error('Error saving config:', error);
-    updateStatus("Lỗi khi lưu cấu hình. Vui lòng thử lại.");
+    updateStatus("Error saving configuration. Please try again.");
   }
-}
-
-async function fetchRepoContent(path) {
-  const response = await fetch(`https://api.github.com/repos/NKPGAMER/Aegis/contents/${path}`);
-  return await response.json();
 }
 
 async function addFilesToZip(zip, items) {
-  let totalFiles = items.filter(item => item.type === 'file').length;
+  const fileItems = items.filter(item => item.type === 'file');
+  const dirItems = items.filter(item => item.type === 'dir');
+
+  const totalFiles = fileItems.length;
   let processedFiles = 0;
 
-  for (const item of items) {
-    if (item.type === 'file') {
-      const fileContent = await fetchFileContent(item.download_url);
-      zip.file(item.path, fileContent);
+  // Process all files concurrently
+  await Promise.all(fileItems.map(async (item) => {
+    const fileContent = await fetchFileContent(item.download_url);
+    zip.file(item.path, fileContent);
 
-      processedFiles += 1;
-      const percent = (processedFiles / totalFiles) * 100;
-      updateProgress(percent);
-    } else if (item.type === 'dir') {
-      const subItems = await fetchRepoContent(item.path);
-      await addFilesToZip(zip, subItems);
-    }
-    updateStatus(`Đang xử lý\n${item.path}`);
+    processedFiles += 1;
+    const percent = (processedFiles / totalFiles) * 100;
+    updateProgress(percent);
+    updateStatus(`Processing ${item.path}`);
+  }));
+
+  // Process directories
+  for (const item of dirItems) {
+    const subItems = await fetchRepoContent(item.path);
+    await addFilesToZip(zip, subItems);
   }
 }
-
 
 async function fetchFileContent(url) {
   const response = await fetch(url);
@@ -309,7 +315,6 @@ async function fetchFileContent(url) {
   return chunksAll.buffer;
 }
 
-
 function updateStatus(message) {
   document.getElementById('status').textContent = message;
 }
@@ -318,4 +323,13 @@ function updateProgress(percent) {
   document.getElementById('progress').style.width = `${percent}%`;
 }
 
-fetchConfig();
+async function fetchRepoContent(path) {
+  const response = await fetch(`${API.content}/${path}`);
+  return await response.json();
+}
+
+function OpenConfig() {
+  fetchConfig();
+  document.getElementById('container').style.display = 'grid';
+  document.getElementById('download-config').style.display = 'none';
+}

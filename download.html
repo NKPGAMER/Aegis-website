@@ -8,9 +8,18 @@
 	<link rel="stylesheet" href="styles/config.css">
 </head>
 
+<header>
+	<h1>Trình tải xuống</h1>
+
+	<div id="download-config" class="group">
+		<h3>Bạn có muốn cấu hình trước khi tải xuống không?</h3>
+		<button onclick="window.location.href = API.download">Tải xuống</button>
+		<button onclick="OpenConfig();">Cấu hình</button>
+	</div>
+</header>
+
 <body>
-	<div class="container">
-		<h1>Aegis Config Generator</h1>
+	<div id="container">
 		<div id="config-container"></div>
 		<button id="submit-button" onclick="saveConfig()">Hoàn tất</button>
 		<div id="progress-bar">

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Box Information</title>
+  <style>
+    :root {
+      --main-backgroud-color: #030303;
+      --main-item-color: #ffffff;
+    }
+
+    body {
+      background-color: var(--main-backgroud-color);
+      color: var(--main-item-color);
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .group {
+      background: linear-gradient(0deg, #420909, #25130d);
+      padding: 20px;
+      width: 80%;
+      max-width: 600px;
+      margin: 10px auto;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      border: 2px solid white;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .group h2 {
+      display: grid;
+      place-items: center;
+      background-color: #8d1b17;
+      width: 80%;
+      height: 30px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 1, 2rem;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .group input {
+      display: block;
+      margin: 10px 0;
+      padding: 10px 50px;
+      border: 30px;
+      background-color: rgba(255, 255, 255, 0.01);
+      backdrop-filter: blur(5px);
+      text-align: center;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .subgroup {
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      background-color: rgba(255, 255, 255, 0);
+      backdrop-filter: blur(5px);
+      display: grid;
+      place-items: center;
+      width: 95%;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      overflow-x: hidden;
+    }
+
+    .subgroup h3 {
+      display: block;
+      background-color: #e05312;
+      max-width: 300px;
+      width: fit-content;
+      padding: 10px 30px 4px 20px;
+      height: 32px;
+      color: #000000;
+      font-size: 22px;
+      font-weight: 500;
+      border-radius: 0 0 40px 0;
+      top: 0;
+      left: 0;
+      position: absolute;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="group">
+    <div class="variable">
+      <input type="text">
+      <input type="text" name="dfhdd">
+    </div>
+  </div>
+
+  <div class="group">
+    <h2>New Group</h2>
+    <div class="variable">
+      <input type="text">
+      <input type="text" name="dfhdd">
+
+
+    </div>
+
+    <div class="subgroup">
+      <h3>subgroup</h2>
+        <div class="subgroup">
+          <h3>subgroup</h2>
+            <input type="text">
+        </div>
+    </div>
+  </div>
+</body>
+
+</html>

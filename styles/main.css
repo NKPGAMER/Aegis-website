@@ -1,5 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Platypi:ital,wght@0,300..800;1,300..800&display=swap');
 
+:root {
+  --bgColor: linear-gradient(to bottom right, #ffd700, #ffcc33)
+}
+
+header {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+header .logo {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+header .button {
+  width: 180px;
+  height: 30px;
+  border-radius: 20px;
+  background: linear-gradient(to bottom right, #fbfbfb, #9b9b9b);
+  font-size: 14px;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -46,12 +71,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.header .logo {
-  width: 300px;
-  height: 300px;
-  margin: 0 auto;
-  transition: all 0.3s ease;
-}
+
 
 .header .title {
   font-size: 24px;
@@ -72,7 +92,7 @@ body {
 
 .header .button {
   padding: 20px 50px;
-  background-color: #FFCC00; /* Màu gold hơi cam mộ tí */
+  background-color: #ffd700;
   border-radius: 20px;
   color: #000000; /* Màu đen */
   font-size: 16px;
@@ -156,10 +176,10 @@ body {
   border-radius: 20px;
   border: 1px solid #8e8e8e;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+  margin: 10px;
   overflow: hidden;
   overflow-y: auto;
-  transition: all 0.3s ease;
-  margin: 10px
 }
 
 .group.hidden {

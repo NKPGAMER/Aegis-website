@@ -1,0 +1,41 @@
+name: Sync Project to Website
+
+on:
+  workflow_dispatch: # Kích hoạt thủ công
+  push:
+    branches:
+      - main # Nhánh chính của repo dự án (thay thế nếu dùng nhánh khác)
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Website Repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: website
+
+      - name: Checkout Project Repo
+        uses: actions/checkout@v2
+        with:
+          repository: username/repo-project # Thay bằng repo dự án của bạn
+          ref: main # Nhánh chính của repo dự án
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: project
+
+      - name: Copy Project to Website
+        run: |
+          cp -R project/* website/path-to-project-folder # Đường dẫn bạn muốn chèn dự án vào website
+
+      - name: Commit and Push changes
+        run: |
+          cd website
+          git config user.name "github-actions[bot]"
+          git config user.email "<>"
+          git add .
+          git commit -m "Sync project with website"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
