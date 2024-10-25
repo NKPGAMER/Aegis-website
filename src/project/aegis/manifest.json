@@ -1,0 +1,59 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "§l§eAegis §fAnti-Cheat",
+    "description": "§eVersion: §cAlpha 1.0",
+    "min_engine_version": [ 1, 20, 80 ],
+    "uuid": "1e14d021-f616-4144-a9c4-1e15498c9377",
+    "version": [ 1, 0, 0 ]
+  },
+  "modules": [
+    {
+      "description": "Data",
+      "type": "data",
+      "uuid": "3b701ba2-ac0b-4a50-9edf-43ac294b0543",
+      "version": [ 1, 0, 0 ]
+    },
+    {
+      "description": "Scripts",
+      "uuid": "1911f23f-9207-4cf1-8a9b-ff92b02f3551",
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/Aegis.js",
+      "version": [ 1, 0, 0 ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "label",
+      "name": "author",
+      "text": "§e• Author: NKPGAMER"
+    },
+    {
+      "type": "label",
+      "name": "language",
+      "text": "§eLanguages:\n§a• English(US) <en-US>\n• Vietnamese <vi-VN>"
+    },
+    {
+      "type": "label",
+      "name": "warning",
+      "text": "§l§•§eAttention:§c This is the first alpha version, there may be problems during operation."
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "1.11.0-beta"
+    },
+    {
+      "module_name": "@minecraft/server-ui",
+      "version": "1.2.0-beta"
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "NKPGAMER"
+    ],
+    "license": "MIT"
+  }
+}

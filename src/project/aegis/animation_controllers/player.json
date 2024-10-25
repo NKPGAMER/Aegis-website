@@ -1,0 +1,343 @@
+{
+  "format_version": "1.10.0",
+  "animation_controllers": {
+    "controller.animation.alive": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "alive": "query.is_alive"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:is_alive\""
+          ]
+        },
+        "alive": {
+          "transitions": [
+            {
+              "default": "!query.is_alive"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:is_alive\""
+          ]
+        }
+      }
+    },
+    "controller.animation.may_fly": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "may_fly": "query.can_fly"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:may_fly\""
+          ]
+        },
+        "may_fly": {
+          "transitions": [
+            {
+              "default": "!query.can_fly"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:may_fly\""
+          ]
+        }
+      }
+    },
+    "controller.animation.attack_time": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "attack_time": "variable.attack_time"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:attack_time\""
+          ]
+        },
+        "attack_time": {
+          "transitions": [
+            {
+              "default": "!variable.attack_time"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:attack_time\""
+          ]
+        }
+      }
+    },
+    "controller.animation.gliding": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "gliding": "query.is_gliding"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:gliding\""
+          ]
+        },
+        "gliding": {
+          "transitions": [
+            {
+              "default": "!query.is_gliding"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:gliding\""
+          ]
+        }
+      }
+    },
+    "controller.animation.jump_action": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "jump_action": "query.is_jumping"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:jump_action\""
+          ]
+        },
+        "jump_action": {
+          "transitions": [
+            {
+              "default": "!query.is_jumping"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:jump_action\""
+          ]
+        }
+      }
+    },
+    "controller.animation.jumping": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "jumping": "query.is_jumping"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:jumping\""
+          ]
+        },
+        "jumping": {
+          "transitions": [
+            {
+              "default": "!query.is_jumping && query.is_on_ground"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:jumping\""
+          ]
+        }
+      }
+    },
+    "controller.animation.levitating": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "levitating": "query.is_levitating"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:levitating\""
+          ]
+        },
+        "levitating": {
+          "transitions": [
+            {
+              "default": "!query.is_levitating"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:levitating\""
+          ]
+        }
+      }
+    },
+    "controller.animation.moving": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "moving": "query.is_moving"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:moving\""
+          ]
+        },
+        "moving": {
+          "transitions": [
+            {
+              "default": "!query.is_moving"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:moving\""
+          ]
+        }
+      }
+    },
+    "controller.animation.on_ground": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "on_ground": "query.is_on_ground"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:on_ground\"",
+            "/tag @s add \"aegis:floating\""
+          ]
+        },
+        "on_ground": {
+          "transitions": [
+            {
+              "default": "!query.is_on_ground"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:on_ground\"",
+            "/tag @s remove \"aegis:floating\""
+          ]
+        }
+      }
+    },
+    "controller.animation.riding": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "riding": "query.is_riding"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:riding\""
+          ]
+        },
+        "riding": {
+          "transitions": [
+            {
+              "default": "!query.is_riding"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:riding\""
+          ]
+        }
+      }
+    },
+    "controller.animation.sneaking": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "sneaking": "query.is_sneaking"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:sneaking\""
+          ]
+        },
+        "sneaking": {
+          "transitions": [
+            {
+              "default": "!query.is_sneaking"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:sneaking\""
+          ]
+        }
+      }
+    },
+    "controller.animation.sprinting": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "sprinting": "query.is_sprinting"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:sprinting\""
+          ]
+        },
+        "sprinting": {
+          "transitions": [
+            {
+              "default": "!query.is_sprinting"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:sprinting\""
+          ]
+        }
+      }
+    },
+    "controller.animation.swimming": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "swimming": "query.is_swimming || query.is_in_water"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:swimming\""
+          ]
+        },
+        "swimming": {
+          "transitions": [
+            {
+              "default": "!query.is_swimming && !query.is_in_water"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:swimming\""
+          ]
+        }
+      }
+    },
+    "controller.animation.sleeping": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "sleeping": "query.is_sleeping"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:sleeping\""
+          ]
+        },
+        "sleeping": {
+          "transitions": [
+            {
+              "default": "!query.is_sleeping"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:sleeping\""
+          ]
+        }
+      }
+    }
+  }
+}

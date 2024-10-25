@@ -1,0 +1,83 @@
+{
+  "format_version": "1.17.20",
+  "animation_controllers": {
+    "controller.animation.alive": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "alive": "query.is_alive"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:is_alive\""
+          ]
+        },
+        "alive": {
+          "transitions": [
+            {
+              "default": "!query.is_alive"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:is_alive\""
+          ]
+        }
+      }
+    },
+    
+    "controller.animation.is_ram_attacking": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "ram_attacking": "query.is_ram_attacking"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:is_ram_attacking\""
+          ]
+        },
+        "ram_attacking": {
+          "transitions": [
+            {
+              "default": "!query.is_ram_attacking"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:is_ram_attacking\""
+          ]
+        }
+      }
+    },
+    
+    "controller.animation.is_sneaking": {
+      "states": {
+        "default": {
+          "transitions": [
+            {
+              "sneaking": "query.is_sneaking"
+            }
+          ],
+          "on_entry": [
+            "/tag @s add \"aegis:is_sneaking\""
+          ]
+        },
+        "sneaking": {
+          "transitions": [
+            {
+              "default": "!query.is_sneaking"
+            }
+          ],
+          "on_entry": [
+            "/tag @s remove \"aegis:is_sneaking\""
+          ]
+        }
+      }
+    },
+    
+    "controller.animation.": {
+      
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "confidential": {
+    "owner": "Hello World",
+    "password": "",
+    "count": 1
+  },
+  "region": {
+    "area": "vi-VN",
+    "language": "vi-VN"
+  },
+  "customCommand": {
+    "enable": true,
+    "prefix": "!"
+  },
+  "chat-manager": {
+    "enable": true, 
+    "chatRank": {
+      "enable": true,
+      "join": "\u00a7r\u00a77] [\u00a7r",
+      "start": "\u00a77[",
+      "end": "\u00a7r\u00a77]"
+    },
+    "max-length": 350,
+    "max-consecutive-message": 3,
+    "message-cooldown": 3000
+  },
+  "watchdog": {
+    "enable": true,
+    "cencel": true,
+    "warn": true
+  },
+  "afk-detection": {
+    "enable": true,
+    "max-afk-time": 900,
+    "warn-time": 30
+  },
+  "anti-reach": {
+    "enable": true,
+    "maxDistance": 8
+  }
+}
