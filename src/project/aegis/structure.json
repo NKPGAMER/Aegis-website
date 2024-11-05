@@ -129,7 +129,7 @@
         "type": "file",
         "name": "index",
         "path": ".git/index",
-        "size": 11832
+        "size": 11840
       },
       {
         "type": "directory",
@@ -153,7 +153,7 @@
             "type": "file",
             "name": "HEAD",
             "path": ".git/logs/HEAD",
-            "size": 219
+            "size": 218
           },
           {
             "type": "directory",
@@ -169,7 +169,7 @@
                     "type": "file",
                     "name": "main",
                     "path": ".git/logs/refs/heads/main",
-                    "size": 228
+                    "size": 227
                   }
                 ]
               },
@@ -187,7 +187,7 @@
                         "type": "file",
                         "name": "main",
                         "path": ".git/logs/refs/remotes/origin/main",
-                        "size": 338
+                        "size": 337
                       }
                     ]
                   }
@@ -215,20 +215,20 @@
             "children": [
               {
                 "type": "file",
-                "name": "pack-cc8a1b20bce3bcd57bea1b0653a2137bc513d2ee.idx",
-                "path": ".git/objects/pack/pack-cc8a1b20bce3bcd57bea1b0653a2137bc513d2ee.idx",
+                "name": "pack-f4fd91c856d6c6fcac33608fbbea4768a50209ce.idx",
+                "path": ".git/objects/pack/pack-f4fd91c856d6c6fcac33608fbbea4768a50209ce.idx",
                 "size": 4376
               },
               {
                 "type": "file",
-                "name": "pack-cc8a1b20bce3bcd57bea1b0653a2137bc513d2ee.pack",
-                "path": ".git/objects/pack/pack-cc8a1b20bce3bcd57bea1b0653a2137bc513d2ee.pack",
-                "size": 284716
+                "name": "pack-f4fd91c856d6c6fcac33608fbbea4768a50209ce.pack",
+                "path": ".git/objects/pack/pack-f4fd91c856d6c6fcac33608fbbea4768a50209ce.pack",
+                "size": 284258
               },
               {
                 "type": "file",
-                "name": "pack-cc8a1b20bce3bcd57bea1b0653a2137bc513d2ee.rev",
-                "path": ".git/objects/pack/pack-cc8a1b20bce3bcd57bea1b0653a2137bc513d2ee.rev",
+                "name": "pack-f4fd91c856d6c6fcac33608fbbea4768a50209ce.rev",
+                "path": ".git/objects/pack/pack-f4fd91c856d6c6fcac33608fbbea4768a50209ce.rev",
                 "size": 524
               }
             ]
@@ -424,7 +424,7 @@
         "type": "file",
         "name": "Aegis.js",
         "path": "scripts/Aegis.js",
-        "size": 3845
+        "size": 5382
       },
       {
         "type": "directory",
@@ -584,7 +584,7 @@
                 "type": "file",
                 "name": "AFK_Detection.js",
                 "path": "scripts/Functions/Modules/AFK_Detection.js",
-                "size": 2877
+                "size": 1509
               },
               {
                 "type": "directory",
@@ -627,7 +627,7 @@
                 "type": "file",
                 "name": "index.js",
                 "path": "scripts/Functions/Modules/index.js",
-                "size": 150
+                "size": 172
               },
               {
                 "type": "file",
@@ -765,9 +765,9 @@
       },
       {
         "type": "file",
-        "name": "index.js",
-        "path": "scripts/index.js",
-        "size": 236
+        "name": "modules-path.js",
+        "path": "scripts/modules-path.js",
+        "size": 552
       },
       {
         "type": "directory",
