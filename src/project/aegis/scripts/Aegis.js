@@ -3,125 +3,198 @@ import { Database } from './Assets/Database';
 import { MemoryCache } from './Assets/MemoryCache';
 import languages from './Data/Languages/languages';
 
-const startTime = Date.now();
+const CONFIG = {
+  PREFIX: '§7[§eAegis§7]§r ',
+  LOCAL_OP_IDS: new Set(['-4294967295', '-206158430207']),
+  DEFAULT_LANG: 'vi-VN',
+  TIMEOUT: 10000,
+  CHECK_INTERVAL: 20
+};
 
-globalThis.Aegis = (() => {
-  const AegisPrefix = '§7[§eAegis§7]§r ';
-  const localOpId = new Set(['-4294967295', '-206158430207']);
-  const aegis = {
-    defaultDimension: world.getDimension('overworld'),
-    config: new Database('config'),
-    Trans: Translation,
-    execute,
-    Database,
-    MemoryCache,
-    ServerType: 'server'
-  };
+class Aegis {
+  constructor() {
+    this.startTime = Date.now();
+    this.defaultDimension = world.getDimension('overworld');
+    this.config = new Database('config');
+    this.Trans = this.Translation.bind(this);
+    this.ServerType = 'server';
+    this.language = this.initializeLanguage();
+    
+    this.initializeServerType();
+  }
 
-  const formatMessage = value =>
-    typeof value === 'string'
-      ? AegisPrefix + value
-      : { rawtext: [{ text: AegisPrefix }, { rawtext: [value] }] };
+  formatMessage(value) {
+    return typeof value === 'string'
+      ? CONFIG.PREFIX + value
+      : { rawtext: [{ text: CONFIG.PREFIX }, { rawtext: [value] }] };
+  }
 
-  aegis.sendMessage = (value, target) => {
-    const msg = formatMessage(value);
+  sendMessage(value, target) {
+    const msg = this.formatMessage(value);
+    
     if (!target) {
       world.sendMessage(msg);
-    } else if (target instanceof Player) {
+      return;
+    }
+
+    if (target instanceof Player) {
       target.sendMessage(msg);
-    } else if (typeof target === 'function') {
-      world.getAllPlayers().filter(target).forEach(player => player.sendMessage(msg));
-    } else if (Array.isArray(target)) {
+      return;
+    }
+
+    const players = world.getAllPlayers();
+    
+    if (typeof target === 'function') {
+      players.filter(target).forEach(player => player.sendMessage(msg));
+      return;
+    }
+
+    if (Array.isArray(target)) {
       target.forEach(p => p instanceof Player && p.sendMessage(msg));
     }
-  };
-
-  aegis.runCommand = command => aegis.defaultDimension.runCommand(command);
-  aegis.runCommandAsync = command => aegis.defaultDimension.runCommandAsync(command);
-
-  (async () => {
-    aegis.ServerType = await new Promise((resolve) => {
-      const checkServerType = () => {
-        const players = world.getAllPlayers();
-        if (players.length > 0) {
-          resolve(players.some(({ id }) => localOpId.has(id)) ? 'local' : 'server');
-        } else if (Date.now() - startTime < 10000) {
-          system.runTimeout(checkServerType, 20);
-        } else {
-          resolve('server');
-        }
-      };
-      checkServerType();
-    });
-  })();
-
-  return aegis;
-})();
-
-function execute([...commands], target = Aegis.defaultDimension) {
-  try {
-    if (typeof target == 'string' || !(target instanceof Dimension || target instanceof Entity)) {
-      target = typeof target == 'string' ? world.getDimension(target) || Aegis.defaultDimension : Aegis.defaultDimension;
-    }
-
-    return commands.map(async command => {
-      if (typeof command == 'string') {
-        return (await target.runCommandAsync(command)).successCount;
-      } else if (typeof command == 'object' && !Array.isArray(command)) {
-        const { successCount } = await target.runCommandAsync(command.run);
-
-        if (successCount > 0) {
-          if (typeof command.success === 'function') {
-            command.success();
-          } else {
-            execute(command, target);
-          }
-        }
-        return successCount;
-      }
-    });
-  } catch (error) {
-    console.error(error)
   }
 
+  runCommand(command) {
+    return this.defaultDimension.runCommand(command);
+  }
+
+  runCommandAsync(command) {
+    return this.defaultDimension.runCommandAsync(command);
+  }
+
+  async initializeServerType() {
+    const checkServerType = () => {
+      const players = world.getAllPlayers();
+      
+      if (players.length > 0) {
+        return players.some(({ id }) => CONFIG.LOCAL_OP_IDS.has(id)) ? 'local' : 'server';
+      }
+      
+      if (Date.now() - this.startTime < CONFIG.TIMEOUT) {
+        return new Promise(resolve => 
+          system.runTimeout(() => resolve(checkServerType()), CONFIG.CHECK_INTERVAL)
+        );
+      }
+      
+      return 'server';
+    };
+
+    this.ServerType = await checkServerType();
+  }
+
+  initializeLanguage() {
+    const languageKey = this.config.get('language-key') || CONFIG.DEFAULT_LANG;
+    return languages[languageKey] || languages[CONFIG.DEFAULT_LANG];
+  }
+
+  Translation(token) {
+    if (typeof token !== 'string') throw new TypeError('Translation token must be a string');
+    return this.language[token] || token;
+  }
+
+  async execute(commands, target = this.defaultDimension) {
+    try {
+      if (!(target instanceof Dimension || target instanceof Entity)) {
+        target = typeof target === 'string' 
+          ? world.getDimension(target) || this.defaultDimension 
+          : this.defaultDimension;
+      }
+
+      return Promise.all(commands.map(async command => {
+        if (typeof command === 'string') {
+          return (await target.runCommandAsync(command)).successCount;
+        }
+        
+        if (typeof command === 'object' && !Array.isArray(command)) {
+          const { successCount } = await target.runCommandAsync(command.run);
+          
+          if (successCount > 0) {
+            if (typeof command.success === 'function') {
+              command.success();
+            } else {
+              this.execute(command, target);
+            }
+          }
+          return successCount;
+        }
+      }));
+    } catch (error) {
+      console.error('Execute error:', error);
+      return [];
+    }
+  }
 }
 
-const language_key = Aegis.config.get('language-key') || 'vi-VN';
-const language = languages[language_key] || languages['vi-VN'];
+// Initialize Aegis
+globalThis.Aegis = new Aegis();
 
-function Translation(token) {
-  if (typeof token != 'string') throw new TypeError();
-  return language[token] || token;
+// Helper function for loading modules
+const loadModules = async (modules, name) => {
+  try {
+    await Promise.all(modules.map(module => import(module)));
+    console.warn(`${name} [Ok]`);
+  } catch (error) {
+    error.name = name;
+    throw error;
+  }
+};
+
+async function loadModules(data) {
+  const { modules, name, whenError } = data;
+  try {
+    if(whenError.stop) {
+      await Promise.all(modules.map(m => import(m)));
+    } else {
+      const results = await Promise.allSettled(modules.map(m => import(m)));
+      const filesError = results.filter(result => result.status === 'rejected');
+      
+    }
+
+    return 'success'
+  } catch(error) {
+    if(whenError.niticab) {
+      console.error(`[Import Modules]-[${name}]`, error);
+    }
+  }
 }
-
-console.warn(`Initialization complete...${(Date.now() - startTime).toFixed(2)}`);
+// Load all modules
+(async () => {
+  const modules = (await import('./modules-path.js')).default;
+  for (const data of modules) {
+    const result = await loadModules(data);
+    if(data.whenError.stop && result === 'error') break;
+  }
+});
 
 (async () => {
-  const loadModules = async (modules, name) => {
-    try {
-      await Promise.all(modules.map(module => import(module)));
-      console.warn(`${name} [Ok]`);
-    } catch (error) {
-      error.name = name;
-      throw error;
-    }
-  };
-
   try {
-    await loadModules([
-      './aegis_modules/javascript-extensions',
-      './aegis_modules/minecraft-extensions',
-      './aegis_modules/loadConfig'
-    ], 'Aegis-Extension');
+    const moduleGroups = [
+      {
+        name: 'Aegis-Extension',
+        modules: [
+          './aegis_modules/javascript-extensions',
+          './aegis_modules/minecraft-extensions',
+          './aegis_modules/loadConfig'
+        ]
+      },
+      {
+        name: 'Aegis-Modules',
+        modules: [
+          './Functions/Modules/index',
+          './Functions/CustomCommands/index',
+          './Handlers/Watchdog',
+          './Handlers/PlayerJoin',
+          './Handlers/ChatSend'
+        ]
+      }
+    ];
 
-    await loadModules([
-      './Functions/Modules/index',
-      './Functions/CustomCommands/index',
-      './Handlers/Watchdog',
-      './Handlers/PlayerJoin',
-      './Handlers/ChatSend'
-    ], 'Aegis-Modules');
+    for (const { name, modules } of moduleGroups) {
+      await loadModules(modules, name);
+    }
   } catch (error) {
-    console.error(error);
+    console.error('Module loading error:', error);
   }
 })();
+
+console.warn(`Initialization complete...${(Date.now() - globalThis.Aegis.startTime).toFixed(2)}ms`);

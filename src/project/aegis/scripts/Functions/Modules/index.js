@@ -4,5 +4,6 @@ import { setup } from './module'
   await Promise.all(modules.map(m => import('./' + m)));
   setup();
 })([
-  'Reach.js'
+  'Reach.js',
+  'AFK_Detection.js'
 ]);
