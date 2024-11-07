@@ -128,72 +128,53 @@ class Aegis {
 // Initialize Aegis
 globalThis.Aegis = new Aegis();
 
-// Helper function for loading modules
-const loadModules = async (modules, name) => {
+const handleError = (error, name, shouldNotify) => {
+  if (shouldNotify) {
+    console.error(`[Import Modules]-[${name}]`, error);
+  }
+  return 'error';
+};
+
+const importModule = async (modulePath) => {
   try {
-    await Promise.all(modules.map(module => import(module)));
-    console.warn(`${name} [Ok]`);
+    return await import(modulePath);
   } catch (error) {
-    error.name = name;
     throw error;
   }
 };
 
-async function loadModules(data) {
-  const { modules, name, whenError } = data;
-  try {
-    if(whenError.stop) {
-      await Promise.all(modules.map(m => import(m)));
-    } else {
-      const results = await Promise.allSettled(modules.map(m => import(m)));
-      const filesError = results.filter(result => result.status === 'rejected');
-      
-    }
+async function loadModules({ modules = [], name = '', whenError = {} }) {
+  if (!modules.length) return 'success';
 
-    return 'success'
-  } catch(error) {
-    if(whenError.niticab) {
-      console.error(`[Import Modules]-[${name}]`, error);
+  try {
+    if (whenError.stop) {
+      await Promise.all(modules.map(importModule));
+    } else {
+      const results = await Promise.allSettled(modules.map(importModule));
+      const errors = results
+        .filter(result => result.status === 'rejected')
+        .map(m => m.reason);
+      
+      if (errors.length) {
+        console.error('[Modules Error]:', ...errors);
+      }
     }
+    return 'success';
+  } catch (error) {
+    return handleError(error, name, whenError.niticab);
   }
 }
-// Load all modules
-(async () => {
-  const modules = (await import('./modules-path.js')).default;
-  for (const data of modules) {
-    const result = await loadModules(data);
-    if(data.whenError.stop && result === 'error') break;
-  }
-});
 
 (async () => {
   try {
-    const moduleGroups = [
-      {
-        name: 'Aegis-Extension',
-        modules: [
-          './aegis_modules/javascript-extensions',
-          './aegis_modules/minecraft-extensions',
-          './aegis_modules/loadConfig'
-        ]
-      },
-      {
-        name: 'Aegis-Modules',
-        modules: [
-          './Functions/Modules/index',
-          './Functions/CustomCommands/index',
-          './Handlers/Watchdog',
-          './Handlers/PlayerJoin',
-          './Handlers/ChatSend'
-        ]
-      }
-    ];
-
-    for (const { name, modules } of moduleGroups) {
-      await loadModules(modules, name);
+    const { default: modules } = await import('./modules-path.js');
+    
+    for (const data of modules) {
+      const result = await loadModules(data);
+      if (data.whenError.stop && result === 'error') break;
     }
   } catch (error) {
-    console.error('Module loading error:', error);
+    console.error('[Module Loader Error]:', error);
   }
 })();
 

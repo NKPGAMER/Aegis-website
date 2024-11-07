@@ -1,4 +1,6 @@
 export default {
+    "$All": "Tất cả",
+
     "gamemode.adventrue": "phiêu lưu",
     "gamemode.survival": "sinh tồn",
     "gamemode.creative": "sáng tạo",

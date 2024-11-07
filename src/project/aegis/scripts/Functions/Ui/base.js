@@ -31,5 +31,19 @@ const moderatorMenu = new ActionFormData()
 const adminMenu = new ActionFormData()
   .title(Aegis.Trans('ui.admin'))
 
+  const findPlayer = new ModalFormData()
+  .title(Aegis.Trans('ui.findPlayer.title'))
+  .dropdown(Aegis.Trans('ui.findPlayer.dimension'), [
+    Aegis.Trans('$All'),
+    'overworld',
+    'nether',
+    'the_end'
+  ])
+  .dropdown(Aegis.Trans('ui.findPlayer.findMode'), [
+    Aegis.Trans('ui.findPlayer.mode.Words'),
+    Aegis.Trans('ui.findPlayer.mode.Regex')
+  ], 1)
+  .textField(Aegis.Trans('ui.findPlayer.input'), '')
+  .toggle(Aegis.Trans('ui.findPlayer.MatchCase'), true);
 
-export { ChangeGameMode }
+export { ChangeGameMode, findPlayer }
