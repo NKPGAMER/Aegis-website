@@ -1,0 +1,1096 @@
+[
+  {
+    "type": "directory",
+    "name": ".git",
+    "path": ".git",
+    "children": [
+      {
+        "type": "file",
+        "name": "FETCH_HEAD",
+        "path": ".git/FETCH_HEAD",
+        "size": 122
+      },
+      {
+        "type": "file",
+        "name": "HEAD",
+        "path": ".git/HEAD",
+        "size": 21
+      },
+      {
+        "type": "directory",
+        "name": "branches",
+        "path": ".git/branches",
+        "children": []
+      },
+      {
+        "type": "file",
+        "name": "config",
+        "path": ".git/config",
+        "size": 411
+      },
+      {
+        "type": "file",
+        "name": "description",
+        "path": ".git/description",
+        "size": 73
+      },
+      {
+        "type": "directory",
+        "name": "hooks",
+        "path": ".git/hooks",
+        "children": [
+          {
+            "type": "file",
+            "name": "applypatch-msg.sample",
+            "path": ".git/hooks/applypatch-msg.sample",
+            "size": 478
+          },
+          {
+            "type": "file",
+            "name": "commit-msg.sample",
+            "path": ".git/hooks/commit-msg.sample",
+            "size": 896
+          },
+          {
+            "type": "file",
+            "name": "fsmonitor-watchman.sample",
+            "path": ".git/hooks/fsmonitor-watchman.sample",
+            "size": 4726
+          },
+          {
+            "type": "file",
+            "name": "post-update.sample",
+            "path": ".git/hooks/post-update.sample",
+            "size": 189
+          },
+          {
+            "type": "file",
+            "name": "pre-applypatch.sample",
+            "path": ".git/hooks/pre-applypatch.sample",
+            "size": 424
+          },
+          {
+            "type": "file",
+            "name": "pre-commit.sample",
+            "path": ".git/hooks/pre-commit.sample",
+            "size": 1649
+          },
+          {
+            "type": "file",
+            "name": "pre-merge-commit.sample",
+            "path": ".git/hooks/pre-merge-commit.sample",
+            "size": 416
+          },
+          {
+            "type": "file",
+            "name": "pre-push.sample",
+            "path": ".git/hooks/pre-push.sample",
+            "size": 1374
+          },
+          {
+            "type": "file",
+            "name": "pre-rebase.sample",
+            "path": ".git/hooks/pre-rebase.sample",
+            "size": 4898
+          },
+          {
+            "type": "file",
+            "name": "pre-receive.sample",
+            "path": ".git/hooks/pre-receive.sample",
+            "size": 544
+          },
+          {
+            "type": "file",
+            "name": "prepare-commit-msg.sample",
+            "path": ".git/hooks/prepare-commit-msg.sample",
+            "size": 1492
+          },
+          {
+            "type": "file",
+            "name": "push-to-checkout.sample",
+            "path": ".git/hooks/push-to-checkout.sample",
+            "size": 2783
+          },
+          {
+            "type": "file",
+            "name": "sendemail-validate.sample",
+            "path": ".git/hooks/sendemail-validate.sample",
+            "size": 2308
+          },
+          {
+            "type": "file",
+            "name": "update.sample",
+            "path": ".git/hooks/update.sample",
+            "size": 3650
+          }
+        ]
+      },
+      {
+        "type": "file",
+        "name": "index",
+        "path": ".git/index",
+        "size": 11840
+      },
+      {
+        "type": "directory",
+        "name": "info",
+        "path": ".git/info",
+        "children": [
+          {
+            "type": "file",
+            "name": "exclude",
+            "path": ".git/info/exclude",
+            "size": 240
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "logs",
+        "path": ".git/logs",
+        "children": [
+          {
+            "type": "file",
+            "name": "HEAD",
+            "path": ".git/logs/HEAD",
+            "size": 217
+          },
+          {
+            "type": "directory",
+            "name": "refs",
+            "path": ".git/logs/refs",
+            "children": [
+              {
+                "type": "directory",
+                "name": "heads",
+                "path": ".git/logs/refs/heads",
+                "children": [
+                  {
+                    "type": "file",
+                    "name": "main",
+                    "path": ".git/logs/refs/heads/main",
+                    "size": 226
+                  }
+                ]
+              },
+              {
+                "type": "directory",
+                "name": "remotes",
+                "path": ".git/logs/refs/remotes",
+                "children": [
+                  {
+                    "type": "directory",
+                    "name": "origin",
+                    "path": ".git/logs/refs/remotes/origin",
+                    "children": [
+                      {
+                        "type": "file",
+                        "name": "main",
+                        "path": ".git/logs/refs/remotes/origin/main",
+                        "size": 336
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "objects",
+        "path": ".git/objects",
+        "children": [
+          {
+            "type": "directory",
+            "name": "info",
+            "path": ".git/objects/info",
+            "children": []
+          },
+          {
+            "type": "directory",
+            "name": "pack",
+            "path": ".git/objects/pack",
+            "children": [
+              {
+                "type": "file",
+                "name": "pack-2f64ee11b5f2da0eb721966453e27c76b30fae2c.idx",
+                "path": ".git/objects/pack/pack-2f64ee11b5f2da0eb721966453e27c76b30fae2c.idx",
+                "size": 4376
+              },
+              {
+                "type": "file",
+                "name": "pack-2f64ee11b5f2da0eb721966453e27c76b30fae2c.pack",
+                "path": ".git/objects/pack/pack-2f64ee11b5f2da0eb721966453e27c76b30fae2c.pack",
+                "size": 284500
+              },
+              {
+                "type": "file",
+                "name": "pack-2f64ee11b5f2da0eb721966453e27c76b30fae2c.rev",
+                "path": ".git/objects/pack/pack-2f64ee11b5f2da0eb721966453e27c76b30fae2c.rev",
+                "size": 524
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "refs",
+        "path": ".git/refs",
+        "children": [
+          {
+            "type": "directory",
+            "name": "heads",
+            "path": ".git/refs/heads",
+            "children": [
+              {
+                "type": "file",
+                "name": "main",
+                "path": ".git/refs/heads/main",
+                "size": 41
+              }
+            ]
+          },
+          {
+            "type": "directory",
+            "name": "remotes",
+            "path": ".git/refs/remotes",
+            "children": [
+              {
+                "type": "directory",
+                "name": "origin",
+                "path": ".git/refs/remotes/origin",
+                "children": [
+                  {
+                    "type": "file",
+                    "name": "main",
+                    "path": ".git/refs/remotes/origin/main",
+                    "size": 41
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "directory",
+            "name": "tags",
+            "path": ".git/refs/tags",
+            "children": []
+          }
+        ]
+      },
+      {
+        "type": "file",
+        "name": "shallow",
+        "path": ".git/shallow",
+        "size": 41
+      }
+    ]
+  },
+  {
+    "type": "directory",
+    "name": ".github",
+    "path": ".github",
+    "children": [
+      {
+        "type": "directory",
+        "name": "workflows",
+        "path": ".github/workflows",
+        "children": [
+          {
+            "type": "file",
+            "name": "generate-structure.yml",
+            "path": ".github/workflows/generate-structure.yml",
+            "size": 2133
+          },
+          {
+            "type": "file",
+            "name": "sync_project.yml",
+            "path": ".github/workflows/sync_project.yml",
+            "size": 1847
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "file",
+    "name": "LICENCE.txt",
+    "path": "LICENCE.txt",
+    "size": 1064
+  },
+  {
+    "type": "file",
+    "name": "README.md",
+    "path": "README.md",
+    "size": 1512
+  },
+  {
+    "type": "directory",
+    "name": "animation_controllers",
+    "path": "animation_controllers",
+    "children": [
+      {
+        "type": "directory",
+        "name": "Data",
+        "path": "animation_controllers/Data",
+        "children": [
+          {
+            "type": "file",
+            "name": "config.json",
+            "path": "animation_controllers/Data/config.json",
+            "size": 0
+          },
+          {
+            "type": "directory",
+            "name": "languages",
+            "path": "animation_controllers/Data/languages",
+            "children": [
+              {
+                "type": "file",
+                "name": "default.json",
+                "path": "animation_controllers/Data/languages/default.json",
+                "size": 36
+              },
+              {
+                "type": "file",
+                "name": "languages.json",
+                "path": "animation_controllers/Data/languages/languages.json",
+                "size": 160
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "file",
+        "name": "TriggerEvents.json",
+        "path": "animation_controllers/TriggerEvents.json",
+        "size": 1751
+      },
+      {
+        "type": "file",
+        "name": "player.json",
+        "path": "animation_controllers/player.json",
+        "size": 7623
+      }
+    ]
+  },
+  {
+    "type": "file",
+    "name": "default.json",
+    "path": "default.json",
+    "size": 731
+  },
+  {
+    "type": "directory",
+    "name": "entities",
+    "path": "entities",
+    "children": [
+      {
+        "type": "file",
+        "name": "player.json",
+        "path": "entities/player.json",
+        "size": 5399
+      }
+    ]
+  },
+  {
+    "type": "file",
+    "name": "generate-structure.js",
+    "path": "generate-structure.js",
+    "size": 842
+  },
+  {
+    "type": "file",
+    "name": "manifest.json",
+    "path": "manifest.json",
+    "size": 1357
+  },
+  {
+    "type": "file",
+    "name": "pack_icon.png",
+    "path": "pack_icon.png",
+    "size": 105276
+  },
+  {
+    "type": "directory",
+    "name": "scripts",
+    "path": "scripts",
+    "children": [
+      {
+        "type": "file",
+        "name": "Aegis.js",
+        "path": "scripts/Aegis.js",
+        "size": 4904
+      },
+      {
+        "type": "directory",
+        "name": "Assets",
+        "path": "scripts/Assets",
+        "children": [
+          {
+            "type": "file",
+            "name": "Database.js",
+            "path": "scripts/Assets/Database.js",
+            "size": 3020
+          },
+          {
+            "type": "file",
+            "name": "MemoryCache.js",
+            "path": "scripts/Assets/MemoryCache.js",
+            "size": 909
+          },
+          {
+            "type": "file",
+            "name": "Puplic.js",
+            "path": "scripts/Assets/Puplic.js",
+            "size": 569
+          },
+          {
+            "type": "file",
+            "name": "Utils.js",
+            "path": "scripts/Assets/Utils.js",
+            "size": 6088
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "Assistant",
+        "path": "scripts/Assistant",
+        "children": [
+          {
+            "type": "file",
+            "name": "featureKeywords.js",
+            "path": "scripts/Assistant/featureKeywords.js",
+            "size": 0
+          },
+          {
+            "type": "file",
+            "name": "keyword.js",
+            "path": "scripts/Assistant/keyword.js",
+            "size": 153
+          },
+          {
+            "type": "file",
+            "name": "main.js",
+            "path": "scripts/Assistant/main.js",
+            "size": 4123
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "Data",
+        "path": "scripts/Data",
+        "children": [
+          {
+            "type": "file",
+            "name": "Colors.js",
+            "path": "scripts/Data/Colors.js",
+            "size": 327
+          },
+          {
+            "type": "file",
+            "name": "Config.js",
+            "path": "scripts/Data/Config.js",
+            "size": 629
+          },
+          {
+            "type": "file",
+            "name": "FaillingBlocks.js",
+            "path": "scripts/Data/FaillingBlocks.js",
+            "size": 1039
+          },
+          {
+            "type": "directory",
+            "name": "Languages",
+            "path": "scripts/Data/Languages",
+            "children": [
+              {
+                "type": "file",
+                "name": "languages.js",
+                "path": "scripts/Data/Languages/languages.js",
+                "size": 162
+              },
+              {
+                "type": "file",
+                "name": "vi-VN.js",
+                "path": "scripts/Data/Languages/vi-VN.js",
+                "size": 1223
+              }
+            ]
+          },
+          {
+            "type": "file",
+            "name": "Tags.js",
+            "path": "scripts/Data/Tags.js",
+            "size": 284
+          },
+          {
+            "type": "directory",
+            "name": "default",
+            "path": "scripts/Data/default",
+            "children": [
+              {
+                "type": "file",
+                "name": "config.js",
+                "path": "scripts/Data/default/config.js",
+                "size": 665
+              }
+            ]
+          },
+          {
+            "type": "file",
+            "name": "nonSolidBlocks.js",
+            "path": "scripts/Data/nonSolidBlocks.js",
+            "size": 6420
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "Functions",
+        "path": "scripts/Functions",
+        "children": [
+          {
+            "type": "directory",
+            "name": "CustomCommands",
+            "path": "scripts/Functions/CustomCommands",
+            "children": [
+              {
+                "type": "file",
+                "name": "handler.js",
+                "path": "scripts/Functions/CustomCommands/handler.js",
+                "size": 3262
+              },
+              {
+                "type": "file",
+                "name": "index.js",
+                "path": "scripts/Functions/CustomCommands/index.js",
+                "size": 18
+              }
+            ]
+          },
+          {
+            "type": "directory",
+            "name": "Modules",
+            "path": "scripts/Functions/Modules",
+            "children": [
+              {
+                "type": "file",
+                "name": "AFK_Detection.js",
+                "path": "scripts/Functions/Modules/AFK_Detection.js",
+                "size": 1509
+              },
+              {
+                "type": "directory",
+                "name": "Movement",
+                "path": "scripts/Functions/Modules/Movement",
+                "children": [
+                  {
+                    "type": "file",
+                    "name": "AirJump.js",
+                    "path": "scripts/Functions/Modules/Movement/AirJump.js",
+                    "size": 0
+                  },
+                  {
+                    "type": "file",
+                    "name": "Flying.js",
+                    "path": "scripts/Functions/Modules/Movement/Flying.js",
+                    "size": 0
+                  },
+                  {
+                    "type": "file",
+                    "name": "HighJump.js",
+                    "path": "scripts/Functions/Modules/Movement/HighJump.js",
+                    "size": 0
+                  },
+                  {
+                    "type": "file",
+                    "name": "Speed.js",
+                    "path": "scripts/Functions/Modules/Movement/Speed.js",
+                    "size": 0
+                  }
+                ]
+              },
+              {
+                "type": "file",
+                "name": "Reach.js",
+                "path": "scripts/Functions/Modules/Reach.js",
+                "size": 721
+              },
+              {
+                "type": "file",
+                "name": "index.js",
+                "path": "scripts/Functions/Modules/index.js",
+                "size": 172
+              },
+              {
+                "type": "file",
+                "name": "module.js",
+                "path": "scripts/Functions/Modules/module.js",
+                "size": 3235
+              }
+            ]
+          },
+          {
+            "type": "directory",
+            "name": "Ui",
+            "path": "scripts/Functions/Ui",
+            "children": [
+              {
+                "type": "file",
+                "name": "base.js",
+                "path": "scripts/Functions/Ui/base.js",
+                "size": 1733
+              },
+              {
+                "type": "file",
+                "name": "dynamic.js",
+                "path": "scripts/Functions/Ui/dynamic.js",
+                "size": 916
+              },
+              {
+                "type": "file",
+                "name": "index.js",
+                "path": "scripts/Functions/Ui/index.js",
+                "size": 4987
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "Handlers",
+        "path": "scripts/Handlers",
+        "children": [
+          {
+            "type": "file",
+            "name": "ChatSend.js",
+            "path": "scripts/Handlers/ChatSend.js",
+            "size": 2775
+          },
+          {
+            "type": "file",
+            "name": "Explosions.js",
+            "path": "scripts/Handlers/Explosions.js",
+            "size": 1904
+          },
+          {
+            "type": "file",
+            "name": "PlayerJoin.js",
+            "path": "scripts/Handlers/PlayerJoin.js",
+            "size": 826
+          },
+          {
+            "type": "file",
+            "name": "Watchdog.js",
+            "path": "scripts/Handlers/Watchdog.js",
+            "size": 554
+          },
+          {
+            "type": "file",
+            "name": "index.js",
+            "path": "scripts/Handlers/index.js",
+            "size": 0
+          }
+        ]
+      },
+      {
+        "type": "directory",
+        "name": "aegis_modules",
+        "path": "scripts/aegis_modules",
+        "children": [
+          {
+            "type": "file",
+            "name": "CustomUI.js",
+            "path": "scripts/aegis_modules/CustomUI.js",
+            "size": 5998
+          },
+          {
+            "type": "directory",
+            "name": "UI",
+            "path": "scripts/aegis_modules/UI",
+            "children": [
+              {
+                "type": "file",
+                "name": "dynamic.js",
+                "path": "scripts/aegis_modules/UI/dynamic.js",
+                "size": 1623
+              },
+              {
+                "type": "file",
+                "name": "static.js",
+                "path": "scripts/aegis_modules/UI/static.js",
+                "size": 765
+              }
+            ]
+          },
+          {
+            "type": "file",
+            "name": "javascript-extensions.js",
+            "path": "scripts/aegis_modules/javascript-extensions.js",
+            "size": 8708
+          },
+          {
+            "type": "file",
+            "name": "loadConfig.js",
+            "path": "scripts/aegis_modules/loadConfig.js",
+            "size": 713
+          },
+          {
+            "type": "file",
+            "name": "minecraft-extensions.js",
+            "path": "scripts/aegis_modules/minecraft-extensions.js",
+            "size": 2215
+          },
+          {
+            "type": "file",
+            "name": "settings.js",
+            "path": "scripts/aegis_modules/settings.js",
+            "size": 616
+          },
+          {
+            "type": "file",
+            "name": "tagRequest.js",
+            "path": "scripts/aegis_modules/tagRequest.js",
+            "size": 618
+          }
+        ]
+      },
+      {
+        "type": "file",
+        "name": "modules-path.js",
+        "path": "scripts/modules-path.js",
+        "size": 552
+      },
+      {
+        "type": "directory",
+        "name": "node_modules",
+        "path": "scripts/node_modules",
+        "children": [
+          {
+            "type": "file",
+            "name": ".package-lock.json",
+            "path": "scripts/node_modules/.package-lock.json",
+            "size": 1872
+          },
+          {
+            "type": "directory",
+            "name": "@minecraft",
+            "path": "scripts/node_modules/@minecraft",
+            "children": [
+              {
+                "type": "directory",
+                "name": "common",
+                "path": "scripts/node_modules/@minecraft/common",
+                "children": [
+                  {
+                    "type": "file",
+                    "name": ".eslintrc.json",
+                    "path": "scripts/node_modules/@minecraft/common/.eslintrc.json",
+                    "size": 463
+                  },
+                  {
+                    "type": "file",
+                    "name": "README.md",
+                    "path": "scripts/node_modules/@minecraft/common/README.md",
+                    "size": 164
+                  },
+                  {
+                    "type": "file",
+                    "name": "index.d.ts",
+                    "path": "scripts/node_modules/@minecraft/common/index.d.ts",
+                    "size": 2266
+                  },
+                  {
+                    "type": "file",
+                    "name": "package.json",
+                    "path": "scripts/node_modules/@minecraft/common/package.json",
+                    "size": 277
+                  },
+                  {
+                    "type": "file",
+                    "name": "tsconfig.json",
+                    "path": "scripts/node_modules/@minecraft/common/tsconfig.json",
+                    "size": 424
+                  }
+                ]
+              },
+              {
+                "type": "directory",
+                "name": "server",
+                "path": "scripts/node_modules/@minecraft/server",
+                "children": [
+                  {
+                    "type": "file",
+                    "name": ".eslintrc.json",
+                    "path": "scripts/node_modules/@minecraft/server/.eslintrc.json",
+                    "size": 463
+                  },
+                  {
+                    "type": "file",
+                    "name": "README.md",
+                    "path": "scripts/node_modules/@minecraft/server/README.md",
+                    "size": 401
+                  },
+                  {
+                    "type": "file",
+                    "name": "index.d.ts",
+                    "path": "scripts/node_modules/@minecraft/server/index.d.ts",
+                    "size": 516469
+                  },
+                  {
+                    "type": "file",
+                    "name": "package.json",
+                    "path": "scripts/node_modules/@minecraft/server/package.json",
+                    "size": 357
+                  },
+                  {
+                    "type": "file",
+                    "name": "tsconfig.json",
+                    "path": "scripts/node_modules/@minecraft/server/tsconfig.json",
+                    "size": 424
+                  }
+                ]
+              },
+              {
+                "type": "directory",
+                "name": "server-ui",
+                "path": "scripts/node_modules/@minecraft/server-ui",
+                "children": [
+                  {
+                    "type": "file",
+                    "name": ".eslintrc.json",
+                    "path": "scripts/node_modules/@minecraft/server-ui/.eslintrc.json",
+                    "size": 463
+                  },
+                  {
+                    "type": "file",
+                    "name": "README.md",
+                    "path": "scripts/node_modules/@minecraft/server-ui/README.md",
+                    "size": 978
+                  },
+                  {
+                    "type": "file",
+                    "name": "index.d.ts",
+                    "path": "scripts/node_modules/@minecraft/server-ui/index.d.ts",
+                    "size": 14273
+                  },
+                  {
+                    "type": "directory",
+                    "name": "node_modules",
+                    "path": "scripts/node_modules/@minecraft/server-ui/node_modules",
+                    "children": [
+                      {
+                        "type": "directory",
+                        "name": "@minecraft",
+                        "path": "scripts/node_modules/@minecraft/server-ui/node_modules/@minecraft",
+                        "children": [
+                          {
+                            "type": "directory",
+                            "name": "server",
+                            "path": "scripts/node_modules/@minecraft/server-ui/node_modules/@minecraft/server",
+                            "children": [
+                              {
+                                "type": "file",
+                                "name": ".eslintrc.json",
+                                "path": "scripts/node_modules/@minecraft/server-ui/node_modules/@minecraft/server/.eslintrc.json",
+                                "size": 463
+                              },
+                              {
+                                "type": "file",
+                                "name": "README.md",
+                                "path": "scripts/node_modules/@minecraft/server-ui/node_modules/@minecraft/server/README.md",
+                                "size": 278
+                              },
+                              {
+                                "type": "file",
+                                "name": "index.d.ts",
+                                "path": "scripts/node_modules/@minecraft/server-ui/node_modules/@minecraft/server/index.d.ts",
+                                "size": 448158
+                              },
+                              {
+                                "type": "file",
+                                "name": "package.json",
+                                "path": "scripts/node_modules/@minecraft/server-ui/node_modules/@minecraft/server/package.json",
+                                "size": 337
+                              },
+                              {
+                                "type": "file",
+                                "name": "tsconfig.json",
+                                "path": "scripts/node_modules/@minecraft/server-ui/node_modules/@minecraft/server/tsconfig.json",
+                                "size": 424
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "file",
+                    "name": "package.json",
+                    "path": "scripts/node_modules/@minecraft/server-ui/package.json",
+                    "size": 398
+                  },
+                  {
+                    "type": "file",
+                    "name": "tsconfig.json",
+                    "path": "scripts/node_modules/@minecraft/server-ui/tsconfig.json",
+                    "size": 424
+                  }
+                ]
+              },
+              {
+                "type": "directory",
+                "name": "vanilla-data",
+                "path": "scripts/node_modules/@minecraft/vanilla-data",
+                "children": [
+                  {
+                    "type": "file",
+                    "name": "README.md",
+                    "path": "scripts/node_modules/@minecraft/vanilla-data/README.md",
+                    "size": 299
+                  },
+                  {
+                    "type": "directory",
+                    "name": "lib",
+                    "path": "scripts/node_modules/@minecraft/vanilla-data/lib",
+                    "children": [
+                      {
+                        "type": "file",
+                        "name": "index.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/index.d.ts",
+                        "size": 471
+                      },
+                      {
+                        "type": "file",
+                        "name": "index.js",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/index.js",
+                        "size": 188211
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-biome.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-biome.d.ts",
+                        "size": 4266
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-block.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-block.d.ts",
+                        "size": 227692
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-cameraPresets.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-cameraPresets.d.ts",
+                        "size": 482
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-cooldownCategory.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-cooldownCategory.d.ts",
+                        "size": 479
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-dimension.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-dimension.d.ts",
+                        "size": 352
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-effect.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-effect.d.ts",
+                        "size": 1679
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-enchantment.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-enchantment.d.ts",
+                        "size": 1898
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-entity.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-entity.d.ts",
+                        "size": 4874
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-feature.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-feature.d.ts",
+                        "size": 931
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-item.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-item.d.ts",
+                        "size": 64601
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-potionEffect.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-potionEffect.d.ts",
+                        "size": 825
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-potionLiquid.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-potionLiquid.d.ts",
+                        "size": 338
+                      },
+                      {
+                        "type": "file",
+                        "name": "mojang-potionModifier.d.ts",
+                        "path": "scripts/node_modules/@minecraft/vanilla-data/lib/mojang-potionModifier.d.ts",
+                        "size": 336
+                      }
+                    ]
+                  },
+                  {
+                    "type": "file",
+                    "name": "package.json",
+                    "path": "scripts/node_modules/@minecraft/vanilla-data/package.json",
+                    "size": 555
+                  },
+                  {
+                    "type": "file",
+                    "name": "tsconfig.json",
+                    "path": "scripts/node_modules/@minecraft/vanilla-data/tsconfig.json",
+                    "size": 501
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "file",
+        "name": "package-lock.json",
+        "path": "scripts/package-lock.json",
+        "size": 2093
+      },
+      {
+        "type": "file",
+        "name": "package.json",
+        "path": "scripts/package.json",
+        "size": 188
+      },
+      {
+        "type": "file",
+        "name": "test.js",
+        "path": "scripts/test.js",
+        "size": 3850
+      }
+    ]
+  }
+]
