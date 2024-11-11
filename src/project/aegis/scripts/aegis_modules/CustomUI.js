@@ -5,103 +5,131 @@ class ActionFormData {
   #buttons;
   #form;
   #functions;
-  constructor(jsonData) {
+  #locked;
+  #cancel;
+  
+  constructor(data = {}) {
     this.#buttons = [];
     this.#functions = [];
     this.#form = new MinecraftUI.ActionFormData();
+    this.#locked = false;
+    this.#cancel = typeof data.onCancel === 'function' ? data.onCancel : void 0;
+  }
 
-    if (jsonData) {
-      this.parseJSON(jsonData);
+  #checkLock(methodName) {
+    if (this.#locked) {
+      const error = new Error(`Cannot call ${methodName} after form is locked`);
+      error.class = this.constructor.name;
+      error.function = methodName;
+      throw error;
     }
   }
 
+  #handleError(error, methodName) {
+    error.class = this.constructor.name;
+    error.function = methodName;
+    console.error(error?.toString() ?? error);
+  }
+
   parseJSON(json) {
+    this.#checkLock('parseJSON');
     try {
-      const data = JSON.parse(json);
-      if (typeof data.title == 'string') {
-        this.#form.title = data.title;
-      }
-      if (typeof data.body == 'string') {
-        this.#form.body = data.body;
-      }
-      if (Array.isArray(data.buttons)) {
-        this.#buttons = [...this.#buttons, ...data.button];
-      }
+      const data = typeof json === 'string' ? JSON.parse(json) : json;
+      const { title, body, buttons } = data;
+      
+      title?.toString() && (this.#form.title = title);
+      body?.toString() && (this.#form.body = body);
+      Array.isArray(buttons) && (this.#buttons.push(...buttons));
     } catch (error) {
-      console.error(error?.toString() ?? error);
+      this.#handleError(error, 'parseJSON');
     }
   }
 
   back(callback) {
+    this.#checkLock('back');
     this.#buttons.unshift({
       label: Aegis.Trans('ui.back_label'),
       icon: 'textures/ui/icon_import',
-      callback: typeof callback == 'function' ? callback : Function.Empty,
+      callback: typeof callback === 'function' ? callback : Function.Empty,
       show: true
-    })
+    });
     return this;
   }
 
   button(label, icon, callback, show = true) {
-    if(!show) return;
+    this.#checkLock('button');
+    if (!show) return this;
+    
     this.#form.button(label, icon);
     this.#functions.push(callback);
-    // this.#buttons.push({
-      // label: typeof label == 'string' ? label : "",
-      // icon: typeof icon == 'string' ? icon : void 0,
-      // callback: typeof callback == 'function' ? callback : Function.Empty,
-      // show: typeof show == 'boolean' ? show : true
-    // });
     return this;
   }
 
   title(value) {
-    this.#form.title((typeof value == 'string' || (typeof value == 'object' && !Array.isArray(value))) ? value : void 0);
-    return this;
-  }
-
-  body(...values) {
-    if(values.some(value => typeof value === 'object')) {
-      values = values.map(value => ({ rawtext: [ typeof value === 'object' ? value : typeof value === 'string' ? { text: value } : "", { text: "\n" } ]}))
-      this.#form.body({ rawtext: values });
-    } else {
-      this.#form.body(values.join('\n'))
+    this.#checkLock('title');
+    if (value && (typeof value === 'string' || (typeof value === 'object' && !Array.isArray(value)))) {
+      this.#form.title(value);
     }
     return this;
   }
 
+  body(...values) {
+    this.#checkLock('body');
+    if (values.some(value => typeof value === 'object')) {
+      const formattedValues = values.map(value => ({
+        rawtext: [
+          typeof value === 'object' ? value : 
+          typeof value === 'string' ? { text: value } : 
+          { text: "" },
+          { text: "\n" }
+        ]
+      }));
+      this.#form.body({ rawtext: formattedValues });
+    } else {
+      this.#form.body(values.join('\n'));
+    }
+    return this;
+  }
+
+  lock() {
+    this.#locked = true;
+    return this;
+  }
+
+  get lockStatus() {
+    return this.#locked ? 'Locked' : 'Unlocked';
+  }
+
   show(player) {
     try {
-      this.#form.show(player).then(res => {
-        if (res.canceled) return;
-        this.#functions?.[res.selection](player);
+      return this.#form.show(player).then(res => {
+        if (!res.canceled) {
+          this.#functions?.[res.selection]?.(player);
+        }
+        return res;
       });
     } catch (error) {
-      error.class = this.constructor.name;
-      error.function = this.show.name;
-      console.error(error?.toString() ?? error);
+      this.#handleError(error, 'show');
     }
   }
 
   async waitShow(player, waitTime = Infinity, messageTimeout) {
     const endTime = system.currentTick + waitTime;
+    
     while (system.currentTick <= endTime) {
       try {
         const response = await this.#form.show(player);
-        if (response.cancelationReason != 'UserBusy') {
+        if (response.cancelationReason !== 'UserBusy') {
           return response;
-        };
+        }
+        await system.waitTicks(20);
       } catch (error) {
-        error.class = this.constructor.name;
-        error.function = this.waitShow.name;
-        console.error(error?.toString() ?? error);
+        this.#handleError(error, 'waitShow');
       }
-      await system.waitTicks(20);
     }
 
     const timeout = new Error(messageTimeout ?? "Wait time exceeded");
-    timeout.class = this.constructor.name;
-    timeout.function = this.waitShow.name;
+    this.#handleError(timeout, 'waitShow');
     throw timeout;
   }
 }

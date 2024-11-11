@@ -183,4 +183,42 @@ function JsonToItemStack(value) {
   }
 }
 
-export { formatProgressBar, ChangeGameMode, isAdmin, isModerator, setActionBar, flag, kick, ban, unban, getAllItemStack, ItemStackToJSON, JsonToItemStack };
+async function clearChat(target) {
+  if (target instanceof Player) {
+    try {
+      const { successCount } = await target.runCommandAsync('function aegis/tools/clearChat');
+      return successCount > 0 ? 'success' : 'fail';
+    } catch (error) {
+      console.error('Error clearing chat:', error);
+      return 'fail';
+    }
+  }
+
+  if (Array.isArray(target)) {
+    const results = await Promise.all(
+      target
+        .filter(player => player instanceof Player)
+        .map(clearChat)
+    );
+
+    return results;
+  }
+
+  throw new Error('Invalid target: Must be Player or Array of Players');
+}
+
+export {
+  formatProgressBar,
+  ChangeGameMode,
+  isAdmin,
+  isModerator,
+  setActionBar,
+  flag,
+  kick,
+  ban,
+  unban,
+  getAllItemStack,
+  ItemStackToJSON,
+  JsonToItemStack,
+  clearChat
+};

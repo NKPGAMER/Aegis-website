@@ -18,5 +18,5 @@ world.afterEvents.playerSpawn.subscribe((event) => {
 console.warn(allPlayers.length);
 system.runInterval(() => {
   allPlayers.forEach(P => P.sendMessage("Hello ")
-  )
-})
+  );
+});

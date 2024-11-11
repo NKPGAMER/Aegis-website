@@ -19,6 +19,8 @@ class Aegis {
     this.Trans = this.Translation.bind(this);
     this.ServerType = 'server';
     this.language = this.initializeLanguage();
+    this.Database = Database;
+    this.MemoryCache = MemoryCache;
     
     this.initializeServerType();
   }
