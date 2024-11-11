@@ -1,13 +1,69 @@
 import { system, Player } from '@minecraft/server';
 import * as MinecraftUI from '@minecraft/server-ui';
 
+class ActionFormData extends MinecraftUI.ActionFormData {
+  #locked = false;
+  #functions = [];
+  #cancel;
+
+  constructor(options) {
+    super();
+    this.#cancel = options.onCancel?.bind(this);
+  }
+
+  lock() {
+    this.#locked = true;
+    return this;
+  }
+
+  unlock() {
+    this.#locked = false;
+    return this;
+  }
+
+  #checkLock(methodName) {
+    if (this.#locked) {
+      const error = new Error(`Cannot call ${methodName} after form is locked`);
+      error.class = this.constructor.name;
+      error.function = methodName;
+      throw error;
+    }
+  }
+
+  title(titleText) {
+    this.#checkLock('title');
+    super.title(titleText);
+    return this;
+  }
+
+  button(text, iconPath, callback) {
+    this.#checkLock('button');
+    if (typeof callback !== 'function') {
+      throw new Error("callback must be a function");
+    }
+    this.#functions.push(callback);
+    super.button(text, iconPath);
+    return this;
+  }
+
+  async show(target) {
+    return super.show(target).then(responses => {
+      if (responses.canceled) {
+        this.#cancel?.(target);
+        return { cancelationReason: responses.cancelationReason };
+      }
+      this.#functions[responses.selection](target);
+    });
+  }
+}
+
 class ActionFormData {
   #buttons;
   #form;
   #functions;
   #locked;
   #cancel;
-  
+
   constructor(data = {}) {
     this.#buttons = [];
     this.#functions = [];
@@ -36,7 +92,7 @@ class ActionFormData {
     try {
       const data = typeof json === 'string' ? JSON.parse(json) : json;
       const { title, body, buttons } = data;
-      
+
       title?.toString() && (this.#form.title = title);
       body?.toString() && (this.#form.body = body);
       Array.isArray(buttons) && (this.#buttons.push(...buttons));
@@ -59,7 +115,7 @@ class ActionFormData {
   button(label, icon, callback, show = true) {
     this.#checkLock('button');
     if (!show) return this;
-    
+
     this.#form.button(label, icon);
     this.#functions.push(callback);
     return this;
@@ -78,9 +134,9 @@ class ActionFormData {
     if (values.some(value => typeof value === 'object')) {
       const formattedValues = values.map(value => ({
         rawtext: [
-          typeof value === 'object' ? value : 
-          typeof value === 'string' ? { text: value } : 
-          { text: "" },
+          typeof value === 'object' ? value :
+            typeof value === 'string' ? { text: value } :
+              { text: "" },
           { text: "\n" }
         ]
       }));
@@ -115,7 +171,7 @@ class ActionFormData {
 
   async waitShow(player, waitTime = Infinity, messageTimeout) {
     const endTime = system.currentTick + waitTime;
-    
+
     while (system.currentTick <= endTime) {
       try {
         const response = await this.#form.show(player);
@@ -238,4 +294,4 @@ class MessageFormData extends MinecraftUI.MessageFormData {
   }
 }
 
-export { ActionFormData, ModalFormData, MessageFormData }
+export { ActionFormData, ModalFormData, MessageFormData };
