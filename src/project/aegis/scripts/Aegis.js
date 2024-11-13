@@ -1,6 +1,6 @@
 import { world, system, Player, Dimension, Entity } from '@minecraft/server';
 import { Database } from './Assets/Database';
-import { MemoryCache } from './Assets/MemoryCache';
+import { GlobalData } from './Assets/GLobalData.js';
 import languages from './Data/Languages/languages';
 
 const CONFIG = {
@@ -20,8 +20,8 @@ class Aegis {
     this.ServerType = 'server';
     this.language = this.initializeLanguage();
     this.Database = Database;
-    this.MemoryCache = MemoryCache;
-    
+    this.GlobalData = new Map();
+
     this.initializeServerType();
   }
 

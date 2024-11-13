@@ -1,6 +1,7 @@
 import { world, system, ItemStack, Player } from '@minecraft/server';
 
 const PlayersData = new WeakMap();
+const GlobalData = Aegis.GlobalData;
 const BanData = new Aegis.Database('data-ban');
 
 async function ChangeGameMode(player, mode) {
