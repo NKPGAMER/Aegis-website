@@ -1,108 +1,59 @@
 import { system, Player } from '@minecraft/server';
 import * as MinecraftUI from '@minecraft/server-ui';
 
-class ActionFormData {
-  #buttons;
-  #form;
-  #functions;
-  constructor(jsonData) {
-    this.#buttons = [];
-    this.#functions = [];
-    this.#form = new MinecraftUI.ActionFormData();
+class ActionFormData extends MinecraftUI.ActionFormData {
+  #locked = false;
+  #functions = [];
+  #cancel;
 
-    if (jsonData) {
-      this.parseJSON(jsonData);
-    }
+  constructor(options) {
+    super();
+    this.#cancel = options.onCancel?.bind(this);
   }
 
-  parseJSON(json) {
-    try {
-      const data = JSON.parse(json);
-      if (typeof data.title == 'string') {
-        this.#form.title = data.title;
-      }
-      if (typeof data.body == 'string') {
-        this.#form.body = data.body;
-      }
-      if (Array.isArray(data.buttons)) {
-        this.#buttons = [...this.#buttons, ...data.button];
-      }
-    } catch (error) {
-      console.error(error?.toString() ?? error);
-    }
-  }
-
-  back(callback) {
-    this.#buttons.unshift({
-      label: Aegis.Trans('ui.back_label'),
-      icon: 'textures/ui/icon_import',
-      callback: typeof callback == 'function' ? callback : Function.Empty,
-      show: true
-    })
+  lock() {
+    this.#locked = true;
     return this;
   }
 
-  button(label, icon, callback, show = true) {
-    if(!show) return;
-    this.#form.button(label, icon);
-    this.#functions.push(callback);
-    // this.#buttons.push({
-      // label: typeof label == 'string' ? label : "",
-      // icon: typeof icon == 'string' ? icon : void 0,
-      // callback: typeof callback == 'function' ? callback : Function.Empty,
-      // show: typeof show == 'boolean' ? show : true
-    // });
+  unlock() {
+    this.#locked = false;
     return this;
   }
 
-  title(value) {
-    this.#form.title((typeof value == 'string' || (typeof value == 'object' && !Array.isArray(value))) ? value : void 0);
-    return this;
-  }
-
-  body(...values) {
-    if(values.some(value => typeof value === 'object')) {
-      values = values.map(value => ({ rawtext: [ typeof value === 'object' ? value : typeof value === 'string' ? { text: value } : "", { text: "\n" } ]}))
-      this.#form.body({ rawtext: values });
-    } else {
-      this.#form.body(values.join('\n'))
-    }
-    return this;
-  }
-
-  show(player) {
-    try {
-      this.#form.show(player).then(res => {
-        if (res.canceled) return;
-        this.#functions?.[res.selection](player);
-      });
-    } catch (error) {
+  #checkLock(methodName) {
+    if (this.#locked) {
+      const error = new Error(`Cannot call ${methodName} after form is locked`);
       error.class = this.constructor.name;
-      error.function = this.show.name;
-      console.error(error?.toString() ?? error);
+      error.function = methodName;
+      throw error;
     }
   }
 
-  async waitShow(player, waitTime = Infinity, messageTimeout) {
-    const endTime = system.currentTick + waitTime;
-    while (system.currentTick <= endTime) {
-      try {
-        const response = await this.#form.show(player);
-        if (response.cancelationReason != 'UserBusy') {
-          return response;
-        };
-      } catch (error) {
-        error.class = this.constructor.name;
-        error.function = this.waitShow.name;
-        console.error(error?.toString() ?? error);
-      }
-      await system.waitTicks(20);
-    }
+  title(titleText) {
+    this.#checkLock('title');
+    super.title(titleText);
+    return this;
+  }
 
-    const timeout = new Error(messageTimeout ?? "Wait time exceeded");
-    timeout.class = this.constructor.name;
-    timeout.function = this.waitShow.name;
-    throw timeout;
+  button(text, iconPath, callback) {
+    this.#checkLock('button');
+    if (typeof callback !== 'function') {
+      throw new Error("callback must be a function");
+    }
+    this.#functions.push(callback);
+    super.button(text, iconPath);
+    return this;
+  }
+
+  async show(target) {
+    return super.show(target).then(responses => {
+      if (responses.canceled) {
+        this.#cancel?.(target);
+        return { cancelationReason: responses.cancelationReason };
+      }
+      this.#functions[responses.selection](target);
+    });
   }
 }
 
@@ -210,4 +161,4 @@ class MessageFormData extends MinecraftUI.MessageFormData {
   }
 }
 
-export { ActionFormData, ModalFormData, MessageFormData }
+export { ActionFormData, ModalFormData, MessageFormData };

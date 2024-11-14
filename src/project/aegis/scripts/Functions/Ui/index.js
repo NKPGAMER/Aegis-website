@@ -47,40 +47,13 @@ function changeGameMode(player) {
   })
 }
 
-const _ChangeWeather = new ModalFormData()
-  .title(Aegis.Trans('ui.change_weather'))
-  .dropdown(Aegis.Trans('ui.change_weather.select'), Object.keys(WeatherType).map(w => Aegis.Trans('weather.') + w))
-  .textField(Aegis.Trans('ui.change_weather.duration'), 'ticks');
 
-function ChangeWeather(player) {
-  _ChangeWeather.show(player)
-    .then(res => {
-      if (res.canceled) return;
-      const weather = WeatherType[Object.keys(WeatherType)[res.formValues[0]]];
-      const duration = Number(res.formValues[1]) || Math.randomInt(1200, 36000);
 
-      world.getDimension('overworld').setWeather(weather, duration);
-      player.tell(Aegis.Trans('ui.change_weather.complete')?.replace('<weather>', Aegis.Trans('weather.' + weather)));
-    })
-    .catch((error) => {
-      error.function = ChangeWeather.name;
-      console.error(error?.toString() || error);
-    });
-}
 
-const timeType = ['sunrise', 'day', 'noon', 'sunset', 'night', 'midnight'];
-const _ChangeTime = new ModalFormData()
-  .title(Aegis.Trans('ui.change_time'))
-  .dropdown(Aegis.Trans('ui.change_time.select'), timeType.map(t => Aegis.Trans(`aegis.time.${t}`)));
 
-function ChangeTime(player) {
-  _ChangeTime.show(player)
-    .then(res => {
-      if (res.canceled) return;
-      world.getDimension('overword').runCommand(`time set ${timeType[res.formValues[0]]}`);
-      player.tell(Aegis.Trans('change_time.complete')?.replace('<time>', Aegis.Trans(`aegis.time.${timeType[res.formValues[0]]}`)));
-    });
-}
+
+
+
 
 const worldTool = new ActionFormData()
   .title(Aegis.Trans('ui.world_tool'))

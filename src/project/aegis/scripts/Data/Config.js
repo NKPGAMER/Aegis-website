@@ -32,5 +32,8 @@ export default {
   "anti-reach": {
     "enable": true,
     "maxDistance": 8
+  },
+  "anti-flying": {
+    "enable": true,
   }
 }
