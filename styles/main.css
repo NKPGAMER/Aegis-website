@@ -18,11 +18,34 @@ header .logo {
 }
 
 header .button {
-  width: 180px;
-  height: 30px;
-  border-radius: 20px;
-  background: linear-gradient(to bottom right, #fbfbfb, #9b9b9b);
-  font-size: 14px;
+  width: 9rem;
+  height: 3rem;
+  border-radius: 30em;
+  font-size: 15px;
+  font-family: inherit;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+header .button::before {
+  content: '';
+  width: 0;
+  height: 3em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #ffcc00;
+  transition: .5s ease;
+  display: block;
+  z-index: -1;
+}
+
+header .button:hover::before {
+  width: 9rem;
 }
 
 body {
