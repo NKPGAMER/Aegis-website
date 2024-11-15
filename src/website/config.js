@@ -279,6 +279,5 @@ function updateProgress(percent) {
 async function OpenConfig() {
   document.getElementById('download-config').style.display = 'none';
   document.getElementById('container').style.display = 'inline';
-  updateStatus("Đang lấy dữ  liệu...");
   await fetchConfig();
 }
