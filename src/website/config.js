@@ -4,25 +4,71 @@ let draggedElement = null;
 let draggedElementInitialY = 0;
 let draggedElementCurrentY = 0;
 
+const OPTIONS = {
+  VERSION: "1.0.0-alpha",
+  CONFIG_FILE_NAME: "Config.js",
+  FILE_NAME: `Aegis-Anti-Cheat`,
+  ZIP_TYPES: [ 'zip', 'mcpack' ]
+}
+
 const API = {
   DEFAULT_CONFIG: 'https://api.github.com/repos/NKPGAMER/Aegis/contents/default.json',
   CONTENTS: 'https://api.github.com/repos/NKPGAMER/Aegis/contents'
 };
 
-async function fetchConfig(params) {
+const GITHUB_TOKEN = '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';
+
+async function fetchWithAuth(url, options = {}) {
   try {
-    const response = await fetch(API.DEFAULT_CONFIG);
+    const headers = {
+      'Authorization': `token ${GITHUB_TOKEN}`,
+      ...options.headers
+    };
+
+    const response = await fetch(url, { ...options, headers });
     const data = await response.json();
-    const content = atob(data.content);
-    configData = JSON.parse(content);
-    renderConfig(configData, document.getElementById('config-container'));
+
+    if (data.message?.includes('API rate limit exceeded')) {
+      // Get rate limit reset time from headers
+      const rateLimitReset = response.headers.get('x-ratelimit-reset');
+      const resetDate = new Date(rateLimitReset * 1000);
+      const minutes = Math.ceil((resetDate - new Date()) / (1000 * 60));
+      
+      throw new Error(`Github API rate limit exceeded. Please try again after ${minutes} minutes (around ${resetDate.toLocaleTimeString()}).`);
+    }
+
+    return data;
   } catch (error) {
-    console.error(error);
-    updateStatus("Error when load config");
+    console.error('API Error:', error);
+    updateStatus(error.message);
+    throw error;
   }
 }
 
-function headerString(container, key, value, currentPath) {
+async function fetchConfig() {
+  try {
+    updateStatus("Đang tải cấu hình...");
+    const data = await fetchWithAuth(API.DEFAULT_CONFIG);
+    
+    if (!data.content) {
+      throw new Error('Invalid config format');
+    }
+
+    const content = atob(data.content);
+    configData = JSON.parse(content);
+    renderConfig(configData, document.getElementById('config-container'));
+    updateStatus("Tải cấu hình thành công");
+  } catch (error) {
+    console.error('Config fetch error:', error);
+    updateStatus(`Lỗi: ${error.message}`);
+  }
+}
+
+async function fetchRepoContent(path) {
+  return await fetchWithAuth(`${API.CONTENTS}/${path}`);
+}
+
+function headerString(container, key, value, currentPath = '') {
   const inputContainer = document.createElement('div');
   inputContainer.className = 'input-container';
   const label = document.createElement('label');
@@ -36,7 +82,7 @@ function headerString(container, key, value, currentPath) {
   container.appendChild(inputContainer);
 }
 
-function headerNumber(container, key, value, currentPath) {
+function headerNumber(container, key, value, currentPath = '') {
   const inputContainer = document.createElement('div');
   inputContainer.className = 'input-container';
   const label = document.createElement('label');
@@ -50,7 +96,7 @@ function headerNumber(container, key, value, currentPath) {
   container.appendChild(inputContainer);
 }
 
-function headerBoolean(container, key, value, currentPath) {
+function headerBoolean(container, key, value, currentPath = '') {
   const inputContainer = document.createElement('div');
   inputContainer.className = 'input-container';
   const label = document.createElement('label');
@@ -90,8 +136,13 @@ function renderConfig(data, container, path = '') {
 
 function updateConfigData() {
   try {
-    const inputs = document.querySelectorAll('input');
+    const inputs = document.querySelectorAll('input, .switch input');    
     inputs.forEach(input => {
+      if (!input.dataset?.path) {
+        console.warn('Input missing data-path:', input);
+        return;
+      }
+
       const path = input.dataset.path.split('.');
       let current = configData;
 
@@ -133,6 +184,7 @@ function updateConfigData() {
       }
     });
   } catch (err) {
+    console.error('Error in updateConfigData:', err);
     updateStatus(err.message + err.stack);
     throw err;
   }
@@ -173,27 +225,27 @@ function getValueFromPath(obj, path) {
 }
 
 async function saveConfig() {
-  updateStatus("Xử lý cấu hinh");
+  updateStatus("Đang xử lý...");
   updateConfigData();
   const configContent = `export default ${JSON.stringify(configData, null, 2)};`;
 
   try {
-    updateStatus("Tạo tệp nén...");
     const zip = new JSZip();
 
-    updateStatus("Lấy dữ liệu");
+    updateStatus("Đang lấy dữ liệu...");
     const repoContent = await fetchRepoContent('');
     await addFilesToZip(zip, repoContent);
 
-    updateStatus("Tạo tệp config");
-    zip.file('scripts/Data/config.js', configContent);
+    updateStatus("Đang tạo tệp cấu hình");
+    zip.file(`scripts/Data/${OPTIONS.CONFIG_FILE_NAME}`, configContent);
 
     updateStatus("Đang nén...");
+    const fileType = document.getElementById('fileType').value;
     const content = await zip.generateAsync({ type: "blob" });
     const zipBlob = new Blob([content], { type: 'application/zip' });
     const downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(zipBlob);
-    downloadLink.download = `Aegis_${version}.mcpack.zip`;
+    downloadLink.download = `${OPTIONS.FILE_NAME}_${OPTIONS.VERSION}.${fileType}`;
 
     downloadLink.click();
 
@@ -203,32 +255,6 @@ async function saveConfig() {
     updateStatus("Lỗi khi lưu cấu hình. Vui lòng thử lại.");
   }
 }
-
-async function fetchRepoContent(path) {
-  const response = await fetch(`${API.CONTENTS}/${path}`);
-  return await response.json();
-}
-
-async function addFilesToZip(zip, items) {
-  let totalFiles = items.filter(item => item.type === 'file').length;
-  let processedFiles = 0;
-
-  for (const item of items) {
-    if (item.type === 'file') {
-      const fileContent = await fetchFileContent(item.download_url);
-      zip.file(item.path, fileContent);
-
-      processedFiles += 1;
-      const percent = (processedFiles / totalFiles) * 100;
-      updateProgress(percent);
-    } else if (item.type === 'dir') {
-      const subItems = await fetchRepoContent(item.path);
-      await addFilesToZip(zip, subItems);
-    }
-    updateStatus(`Đang xử lý\n${item.path}`);
-  }
-}
-
 
 async function fetchFileContent(url) {
   const response = await fetch(url);
@@ -279,5 +305,7 @@ function updateProgress(percent) {
 async function OpenConfig() {
   document.getElementById('download-config').style.display = 'none';
   document.getElementById('container').style.display = 'inline';
+  updateStatus("Đang lấy cấu hình...")
   await fetchConfig();
+  updateStatus("Lấy cấu hình hoàn tất.")
 }
